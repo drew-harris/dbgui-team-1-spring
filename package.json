@@ -1,0 +1,29 @@
+{
+  "name": "db-gui-team-1",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev-backend": "turbo dev --filter=backend",
+    "dev-frontend": "turbo dev --filter=backend",
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "build-backend": "turbo build --filter=backend",
+    "build-frontend": "turbo build --filter=frontend",
+    "serve": "turbo serve",
+    "serve-backend": "turbo serve --filter=backend",
+    "serve-frontend": "turbo serve --filter=frontend",
+    "format": "npx prettier --config .prettierrc '**/*.{ts,tsx,css}' --write",
+    "format-check": "npx prettier --config .prettierrc '**/*.{ts,tsx,css}' --check"
+  },
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
+  "author": "Team 1",
+  "license": "ISC",
+  "devDependencies": {
+    "prettier": "2.7.1",
+    "turbo": "^1.5.5"
+  }
+}

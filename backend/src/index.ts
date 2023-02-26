@@ -15,6 +15,16 @@ app.get("/", (req, res) => {
   res.send("Hello World");
 });
 
+app.post("/uppercase", (req, res) => {
+  if (!req.body.sentence) {
+    throw new APIError("Missing sentence", 400);
+  }
+
+  res.json({
+    message: req.body.sentence.toUpperCase(),
+  });
+});
+
 app.use((err, _req, res, _next) => {
   console.error("Caught");
   if (err instanceof APIError) {

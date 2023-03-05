@@ -2,30 +2,28 @@ import * as cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
 import { APIError } from "./error";
+import { userRouter } from "./routers/userRouters";
 
 // Load enviornment variables from .env file
 dotenv.config();
 
 const app = express();
 app.use(cors.default());
+app.use(express.json());
 
 const port = process.env.PORT || 8000;
 
-app.get("/", (req, res) => {
-  res.send("Hello World");
+app.get("/health", (req, res) => {
+  res.send("OK");
 });
 
-app.post("/uppercase", (req, res) => {
-  if (!req.body.sentence) {
-    throw new APIError("Missing sentence", 400);
+app.use("/user", userRouter);
+
+app.use((err, _req, res, next) => {
+  console.log("ERROR CAUGHT");
+  if (res.headersSent) {
+    return next(err);
   }
-
-  res.json({
-    message: req.body.sentence.toUpperCase(),
-  });
-});
-
-app.use((err, _req, res, _next) => {
   if (err instanceof APIError) {
     console.log(err.originalError);
     res.status(err.status).json({

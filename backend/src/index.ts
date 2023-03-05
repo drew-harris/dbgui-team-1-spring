@@ -1,6 +1,6 @@
-import express from "express";
-import dotenv from "dotenv";
 import * as cors from "cors";
+import dotenv from "dotenv";
+import express from "express";
 import { APIError } from "./error";
 
 // Load enviornment variables from .env file
@@ -26,8 +26,8 @@ app.post("/uppercase", (req, res) => {
 });
 
 app.use((err, _req, res, _next) => {
-  console.error("Caught");
   if (err instanceof APIError) {
+    console.log(err.originalError);
     res.status(err.status).json({
       error: {
         error: err.originalError,
@@ -35,6 +35,7 @@ app.use((err, _req, res, _next) => {
       },
     });
   } else {
+    console.error(err);
     res.status(500).json({
       error: {
         error: err.message,

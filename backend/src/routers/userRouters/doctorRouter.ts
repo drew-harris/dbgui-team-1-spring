@@ -44,6 +44,7 @@ doctorRouter.post("/signup", async (req, res) => {
   });
 
   if (possibleUser) {
+    console.log("User already exists", possibleUser);
     throw new APIError("User already exists", 400);
   }
 

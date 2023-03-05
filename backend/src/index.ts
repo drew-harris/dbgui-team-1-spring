@@ -20,12 +20,13 @@ app.get("/health", (req, res) => {
 app.use("/user", userRouter);
 
 app.use((err, _req, res, next) => {
-  console.log("ERROR CAUGHT");
   if (res.headersSent) {
     return next(err);
   }
   if (err instanceof APIError) {
-    console.log(err.originalError);
+    if (err.originalError) {
+      console.error(err.originalError);
+    }
     res.status(err.status).json({
       error: {
         error: err.originalError,

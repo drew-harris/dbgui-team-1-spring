@@ -1,0 +1,90 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Patient {
+  id        String   @id @default(cuid())
+  username  String   @unique
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+
+  firstName String
+  lastName  String
+  address   String
+
+  doctor        Doctor?        @relation(fields: [doctorId], references: [id])
+  doctorId      String
+  appointments  Appointment[]
+  prescriptions Prescription[]
+  leftReviews   Review[]
+}
+
+model Doctor {
+  id        String   @id @default(cuid())
+  username  String   @unique
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+
+  firstName String
+  lastName  String
+  practice  String
+
+  appointments  Appointment[]
+  patients      Patient[]
+  prescriptions Prescription[]
+  reviews       Review[]
+}
+
+model Appointment {
+  id   String   @id @default(cuid())
+  time DateTime
+
+  createdAt DateTime @default(now())
+
+  patient   Patient @relation(fields: [patientId], references: [id])
+  patientId String
+
+  doctor   Doctor @relation(fields: [doctorId], references: [id])
+  doctorId String
+}
+
+model Prescription {
+  id String @id @default(cuid())
+
+  patient   Patient @relation(fields: [patientId], references: [id])
+  patientId String
+
+  doctor   Doctor @relation(fields: [doctorId], references: [id])
+  doctorId String
+
+  refills Refill[]
+}
+
+model Refill {
+  id       String  @id @default(cuid())
+  approved Boolean @default(false)
+
+  prescription   Prescription @relation(fields: [prescriptionId], references: [id])
+  prescriptionId String
+}
+
+model Review {
+  id       String @id @default(cuid())
+  doctor   Doctor @relation(fields: [doctorId], references: [id])
+  doctorId String
+
+  leftBy   Patient @relation(fields: [leftById], references: [id])
+  leftById String
+
+  rating Int
+}

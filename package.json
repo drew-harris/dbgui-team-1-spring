@@ -18,7 +18,8 @@
   },
   "workspaces": [
     "frontend",
-    "backend"
+    "backend",
+    "schema"
   ],
   "author": "Team 1",
   "license": "ISC",

@@ -82,3 +82,46 @@ doctorRouter.post("/signup", async (req, res) => {
 
   return res.json({ jwt: token, user: doctor });
 });
+
+doctorRouter.post("/signin", async (req, res) => {
+  // Needs email and password to sign in
+  const { email, password } = req.body;
+
+  if (!email) {
+    throw new APIError("Email is required", 400);
+  }
+  if (!password) {
+    throw new APIError("Password is required", 400);
+  }
+
+  const doctor = await prisma.doctor.findFirst({
+    where: {
+      email: email,
+    },
+  });
+
+  if (!doctor) {
+    throw new APIError("User not found", 404);
+  }
+
+  const isPasswordCorrect = await bcrypt.compare(
+    req.body.password,
+    doctor.password
+  );
+
+  if (!isPasswordCorrect) {
+    throw new APIError("Incorrect password", 400);
+  }
+
+  const token = jwt.sign(
+    {
+      id: doctor.id,
+      email: doctor.email,
+      username: doctor.username,
+    },
+    process.env.JWT_SECRET,
+    { expiresIn: "30d" }
+  );
+
+  return res.cookie("jwt", token).json({ jwt: token });
+});

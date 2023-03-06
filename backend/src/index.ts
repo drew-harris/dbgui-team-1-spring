@@ -1,7 +1,9 @@
 import * as cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
+import cookieParser from "cookie-parser";
 import { APIError } from "./error";
+import { protectedRouter } from "./routers/protectedRouter";
 import { userRouter } from "./routers/userRouters";
 
 // Load enviornment variables from .env file
@@ -10,6 +12,7 @@ dotenv.config();
 const app = express();
 app.use(cors.default());
 app.use(express.json());
+app.use(cookieParser());
 
 const port = process.env.PORT || 8000;
 
@@ -18,6 +21,7 @@ app.get("/health", (req, res) => {
 });
 
 app.use("/user", userRouter);
+app.use("/protected", protectedRouter);
 
 app.use((err, _req, res, next) => {
   if (res.headersSent) {

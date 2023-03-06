@@ -100,6 +100,8 @@ doctorRouter.post("/signin", async (req, res) => {
     },
   });
 
+  console.log("Doctor", doctor);
+
   if (!doctor) {
     throw new APIError("User not found", 404);
   }

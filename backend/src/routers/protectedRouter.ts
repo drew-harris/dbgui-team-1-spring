@@ -6,5 +6,5 @@ export const protectedRouter = Router();
 protectedRouter.use(authMiddleware);
 
 protectedRouter.get("/", (req, res) => {
-  res.send("Current User: " + req.user.username);
+  res.json({ message: "You are authorized", username: req.user.username });
 });

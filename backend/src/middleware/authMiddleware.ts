@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 import { APIError } from "../error";
 
 export const authMiddleware = (req, _res, next) => {
-  const token = req.cookies.jwt;
+  const token = req.headers.authorization || req.cookies.jwt;
 
   if (!token) {
     throw new APIError("Unauthorized", 401);

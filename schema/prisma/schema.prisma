@@ -21,7 +21,7 @@ model Patient {
   lastName  String
 
   doctor        Doctor?        @relation(fields: [doctorId], references: [id])
-  doctorId      String
+  doctorId      String?
   appointments  Appointment[]
   prescriptions Prescription[]
   leftReviews   Review[]

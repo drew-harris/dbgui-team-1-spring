@@ -3,7 +3,7 @@
 import { Request } from "express";
 
 type SafeParams = {
-  [s: string]: string | undefined;
+  [s: string]: string;
 };
 
 export function parseParams(req: Request): SafeParams {
@@ -11,7 +11,7 @@ export function parseParams(req: Request): SafeParams {
   const safe: SafeParams = {};
   for (const key in raw) {
     if (typeof raw[key] !== "string") continue;
-    safe[key] = (raw[key] as string) || undefined;
+    safe[key] = (raw[key] as string) || undefined || undefined;
   }
   return safe;
 }

@@ -18,6 +18,7 @@ doctorRouter.get("/", async (req, res) => {
       username: params.username,
       practice: params.practice,
     },
+    take: params.limit ? parseInt(params.limit) : undefined,
     select: {
       id: true,
       firstName: true,

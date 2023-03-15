@@ -78,7 +78,14 @@ doctorRouter.post("/signup", async (req, res) => {
     throw new APIError("JWT secret not found", 500);
   }
 
-  const token = jwt.sign(doctor, process.env.JWT_SECRET, { expiresIn: "30d" });
+  const token = jwt.sign(
+    {
+      ...doctor,
+      type: "doctor",
+    },
+    process.env.JWT_SECRET,
+    { expiresIn: "30d" }
+  );
 
   return res.json({ jwt: token, user: doctor });
 });

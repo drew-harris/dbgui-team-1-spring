@@ -1,7 +1,7 @@
 export class APIError extends Error {
   message: string;
   status: number;
-  originalError: Error;
+  originalError: Error | null;
 
   constructor(
     message = "Internal Server Error",

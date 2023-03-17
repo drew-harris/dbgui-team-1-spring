@@ -8,7 +8,8 @@ export const doctorRouter = Router();
 
 doctorRouter.post("/signup", async (req, res) => {
   console.log(req.body);
-  const { username, email, password, practice, firstName, lastName } = req.body;
+  const { username, email, password, practice, firstName, lastName, location } =
+    req.body;
 
   if (!username) {
     throw new APIError("Username is required", 400);
@@ -27,6 +28,9 @@ doctorRouter.post("/signup", async (req, res) => {
   }
   if (!lastName) {
     throw new APIError("Last name is required", 400);
+  }
+  if (!location) {
+    throw new APIError("Location is required", 400);
   }
 
   // Check if user with email or username already exists
@@ -61,6 +65,7 @@ doctorRouter.post("/signup", async (req, res) => {
       password: hashedPassword,
       lastName,
       practice,
+      location,
     },
 
     /** 
@@ -127,6 +132,7 @@ doctorRouter.post("/signin", async (req, res) => {
       id: doctor.id,
       email: doctor.email,
       username: doctor.username,
+      type: "doctor",
     },
     process.env.JWT_SECRET,
     { expiresIn: "30d" }

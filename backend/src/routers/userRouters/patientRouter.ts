@@ -124,6 +124,7 @@ patientRouter.post("/signin", async (req, res) => {
       id: patient.id,
       email: patient.email,
       username: patient.username,
+      type: "patient",
     },
     process.env.JWT_SECRET,
     { expiresIn: "30d" }

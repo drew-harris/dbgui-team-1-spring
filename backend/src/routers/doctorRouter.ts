@@ -1,3 +1,4 @@
+import { Prisma } from "@prisma/client";
 import { Router } from "express";
 import { prisma } from "../db";
 import { APIError } from "../error";
@@ -18,6 +19,7 @@ doctorRouter.get("/", async (req, res) => {
       email: params.email,
       username: params.username,
       practice: params.practice,
+      location: params.location,
     },
     take: params.limit ? parseInt(params.limit) : undefined,
     select: {
@@ -27,6 +29,7 @@ doctorRouter.get("/", async (req, res) => {
       practice: true,
       email: true,
       username: true,
+      location: true,
     },
     orderBy: {
       [params.orderBy]: params.order,
@@ -34,6 +37,23 @@ doctorRouter.get("/", async (req, res) => {
   });
 
   return res.json(doctors);
+});
+
+doctorRouter.get("/fields", async (req, res) => {
+  const params = parseParams(req);
+  const field = params.field;
+  if (!field) {
+    throw new APIError("Missing field", 400);
+  }
+  const doctors = await prisma.doctor.findMany({
+    distinct: field as Prisma.Enumerable<Prisma.DoctorScalarFieldEnum>,
+    select: {
+      [field]: true,
+    },
+  });
+
+  const values = doctors.map((doctor) => doctor[field]);
+  return res.json(values);
 });
 
 doctorRouter.get("/search", async (req, res) => {
@@ -61,6 +81,7 @@ doctorRouter.get("/search", async (req, res) => {
       practice: true,
       email: true,
       username: true,
+      location: true,
     },
   });
 
@@ -69,7 +90,7 @@ doctorRouter.get("/search", async (req, res) => {
 
 // Links a doctor to a patient and vice versa
 doctorRouter.post("/link", async (req, res) => {
-  console.log("Linking doctor and patient");
+  console.log("Linking doctor and patient as:", req.user);
   if (!req.body.doctorId && !req.body.patientId) {
     throw new APIError("Missing doctor or patient", 400);
   }
@@ -79,11 +100,7 @@ doctorRouter.post("/link", async (req, res) => {
         id: req.user.type === "patient" ? req.user.id : req.body.patientId,
       },
       data: {
-        doctor: {
-          connect: {
-            id: req.user.type === "doctor" ? req.user.id : req.body.doctorId,
-          },
-        },
+        doctorId: req.user.type === "doctor" ? req.user.id : req.body.doctorId,
       },
       include: {
         doctor: true,
@@ -95,4 +112,21 @@ doctorRouter.post("/link", async (req, res) => {
     console.error(error);
     throw new APIError("Error linking doctor and patient", 500);
   }
+});
+
+doctorRouter.post("/unlink", async (req, res) => {
+  // only takes a patient id
+  console.log("Unlinking doctor and patient as:", req.user);
+  const patient = await prisma.patient.update({
+    where: {
+      id: req.user.type === "patient" ? req.user.id : req.body.patientId,
+    },
+    data: {
+      doctor: {
+        disconnect: true,
+      },
+    },
+  });
+
+  res.json(patient); // returns the patient with null doctor
 });

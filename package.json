@@ -15,7 +15,8 @@
     "serve-frontend": "turbo serve --filter=frontend",
     "format": "npx prettier --config .prettierrc '**/*.{ts,tsx,css}' --write",
     "format-check": "npx prettier --config .prettierrc '**/*.{ts,tsx,css}' --check",
-    "update-schema": "npm run push -w schema"
+    "update-schema": "npm run push -w schema",
+    "studio": "npm run studio -w schema"
   },
   "workspaces": [
     "frontend",

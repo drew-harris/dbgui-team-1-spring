@@ -36,6 +36,37 @@ doctorRouter.get("/", async (req, res) => {
   return res.json(doctors);
 });
 
+doctorRouter.get("/search", async (req, res) => {
+  const params = parseParams(req);
+  const doctors = await prisma.doctor.findMany({
+    where: {
+      OR: [
+        {
+          firstName: {
+            contains: params.query,
+          },
+        },
+        {
+          lastName: {
+            contains: params.query,
+          },
+        },
+      ],
+    },
+    take: params.limit ? parseInt(params.limit) : undefined,
+    select: {
+      id: true,
+      firstName: true,
+      lastName: true,
+      practice: true,
+      email: true,
+      username: true,
+    },
+  });
+
+  return res.json(doctors);
+});
+
 // Links a doctor to a patient and vice versa
 doctorRouter.post("/link", async (req, res) => {
   console.log("Linking doctor and patient");

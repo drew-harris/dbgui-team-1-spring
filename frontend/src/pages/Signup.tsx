@@ -97,12 +97,12 @@ function Signup() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-blue-200">
-      <div className="bg-white rounded-lg w-full max-w-md border border-blue-300">
+    <div className="flex min-h-screen items-center justify-center bg-blue-200">
+      <div className="w-full max-w-md rounded-lg border border-blue-300 bg-white">
         <div className="flex">
           <button
             onClick={() => handleSetRole("Patient")}
-            className={`w-1/2 p-2 text-white rounded-tl-md ${
+            className={`w-1/2 rounded-tl-md p-2 text-white ${
               role === "Patient" ? "bg-blue-500" : "bg-blue-300"
             }`}
           >
@@ -110,7 +110,7 @@ function Signup() {
           </button>
           <button
             onClick={() => handleSetRole("Doctor")}
-            className={`w-1/2 p-4 text-white rounded-tr-md ${
+            className={`w-1/2 rounded-tr-md p-4 text-white ${
               role === "Doctor" ? "bg-blue-500" : "bg-blue-300"
             }`}
           >
@@ -118,21 +118,21 @@ function Signup() {
           </button>
         </div>
         <div className="m-6">
-          <h1 className="text-2xl font-bold mb-4">Sign up as {role}</h1>
+          <h1 className="mb-4 text-2xl font-bold">Sign up as {role}</h1>
           <form onSubmit={handleSubmit}>
             {step === 1 && (
               <>
                 <input
                   type="text"
                   placeholder="Username"
-                  className="w-full p-2 mb-4 border rounded"
+                  className="mb-4 w-full rounded border p-2"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                 />
                 <input
                   type="email"
                   placeholder="Email"
-                  className="w-full p-2 mb-4 border rounded"
+                  className="mb-4 w-full rounded border p-2"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
@@ -140,7 +140,7 @@ function Signup() {
                   <input
                     type={showPassword ? "text" : "password"}
                     placeholder="Password"
-                    className="w-full p-2 mb-4 border rounded"
+                    className="mb-4 w-full rounded border p-2"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                   />
@@ -156,7 +156,7 @@ function Signup() {
                   <input
                     type={showConfirmPassword ? "text" : "password"}
                     placeholder="Confirm Password"
-                    className="w-full p-2 mb-4 border rounded"
+                    className="mb-4 w-full rounded border p-2"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                   />
@@ -175,28 +175,28 @@ function Signup() {
                 <input
                   type="text"
                   placeholder="First Name"
-                  className="w-full p-2 mb-4 border rounded"
+                  className="mb-4 w-full rounded border p-2"
                   value={firstName}
                   onChange={(e) => setFirstName(e.target.value)}
                 />
                 <input
                   type="text"
                   placeholder="Last Name"
-                  className="w-full p-2 mb-4 border rounded"
+                  className="mb-4 w-full rounded border p-2"
                   value={lastName}
                   onChange={(e) => setLastName(e.target.value)}
                 />
                 <input
                   type="text"
                   placeholder="Practice"
-                  className="w-full p-2 mb-4 border rounded"
+                  className="mb-4 w-full rounded border p-2"
                   value={practice}
                   onChange={(e) => setPractice(e.target.value)}
                 />
                 <input
                   type="text"
                   placeholder="Location"
-                  className="w-full p-2 mb-4 border rounded"
+                  className="mb-4 w-full rounded border p-2"
                   value={location}
                   onChange={(e) => setLocation(e.target.value)}
                 />
@@ -204,7 +204,7 @@ function Signup() {
             )}
             <button
               type="submit"
-              className="w-full p-2 bg-blue-500 text-white rounded"
+              className="w-full rounded bg-blue-500 p-2 text-white"
             >
               {role === "Patient"
                 ? "Create Account"

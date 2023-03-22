@@ -26,7 +26,8 @@
   "author": "Team 1",
   "license": "ISC",
   "devDependencies": {
-    "prettier": "2.7.1",
+    "prettier": "^2.7.1",
+    "prettier-plugin-tailwindcss": "^0.2.5",
     "turbo": "^1.5.5"
   },
   "dependencies": {

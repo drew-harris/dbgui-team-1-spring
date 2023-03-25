@@ -6,6 +6,7 @@ import { APIError } from "./error";
 import { protectedRouter } from "./routers/protectedRouter";
 import { userRouter } from "./routers/userRouters";
 import { doctorRouter } from "./routers/doctorRouter";
+import { discussionRouter } from "./routers/discussionRouter";
 
 // Load enviornment variables from .env file
 dotenv.config();
@@ -23,6 +24,7 @@ app.get("/health", (req, res) => {
 
 app.use("/user", userRouter);
 app.use("/doctors", doctorRouter);
+app.use("/discussions", discussionRouter);
 app.use("/protected", protectedRouter);
 
 app.use((err, _req, res, next) => {

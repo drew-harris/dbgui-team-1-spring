@@ -32,7 +32,7 @@ model Doctor {
   username  String   @unique
   email     String   @unique
   password  String
-  location String
+  location  String
   createdAt DateTime @default(now())
 
   firstName String
@@ -43,6 +43,9 @@ model Doctor {
   patients      Patient[]
   prescriptions Prescription[]
   reviews       Review[]
+
+  discussions   Discussion[]
+  comments      Comment[]
 }
 
 model Appointment {
@@ -87,4 +90,27 @@ model Review {
   leftById String
 
   rating Int
+}
+
+model Discussion {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+  createdBy   Doctor   @relation(fields: [createdById], references: [id])
+  createdById String
+
+  content String
+
+  comments Comment[]
+}
+
+model Comment {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+  createdBy   Doctor   @relation(fields: [createdById], references: [id])
+  createdById String
+
+  discussion   Discussion @relation(fields: [discussionId], references: [id])
+  discussionId String
+
+  content String
 }

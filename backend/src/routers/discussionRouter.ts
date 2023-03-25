@@ -28,4 +28,9 @@ discussionRouter.post("/", async (req, res) => {
   return res.json(post);
 });
 
+discussionRouter.get("/", async (req, res) => {
+  const posts = await prisma.discussion.findMany({});
+  res.json(posts);
+});
+
 export { discussionRouter };

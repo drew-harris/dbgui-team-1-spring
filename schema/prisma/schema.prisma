@@ -44,8 +44,8 @@ model Doctor {
   prescriptions Prescription[]
   reviews       Review[]
 
-  discussions   Discussion[]
-  comments      Comment[]
+  discussions Discussion[]
+  comments    Comment[]
 }
 
 model Appointment {
@@ -98,7 +98,8 @@ model Discussion {
   createdBy   Doctor   @relation(fields: [createdById], references: [id])
   createdById String
 
-  content String
+  title String
+  body  String
 
   comments Comment[]
 }

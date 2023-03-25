@@ -31,9 +31,11 @@ doctorRouter.get("/", async (req, res) => {
       username: true,
       location: true,
     },
-    orderBy: {
-      [params.orderBy]: params.order,
-    },
+    orderBy: params.orderBy
+      ? {
+          [params.orderBy]: params.order,
+        }
+      : undefined,
   });
 
   return res.json(doctors);

@@ -35,3 +35,22 @@ export const doctorOnlyMiddleware = (req, _res, next) => {
   }
   next();
 };
+
+export const patientOnlyMiddleware = (req, _res, next) => {
+  const token = req.headers.authorization || req.cookies.jwt;
+
+  if (!token) {
+    throw new APIError("Unauthorized", 401);
+  }
+
+  const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+  if (!decodedToken) {
+    throw new APIError("Unauthorized", 401);
+  }
+
+  req.user = decodedToken;
+  if (req.user.type !== "patient") {
+    throw new APIError("Unauthorized (must be a patient)", 401);
+  }
+  next();
+};

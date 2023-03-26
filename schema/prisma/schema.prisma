@@ -53,6 +53,9 @@ model Appointment {
   time DateTime
 
   createdAt DateTime @default(now())
+  approved  Boolean  @default(false)
+
+  reason String
 
   patient   Patient @relation(fields: [patientId], references: [id])
   patientId String

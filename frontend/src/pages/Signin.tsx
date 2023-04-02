@@ -1,4 +1,9 @@
 import React, { useState } from "react";
+import { toast } from "react-hot-toast";
+import { useLogin } from "../utils/useAuth";
+import { useNavigate } from "react-router-dom";
+import { setJwt } from "../utils/jwt";
+import { getJwt } from "../utils/jwt";
 
 function Signin() {
   const [role, setRole] = useState("Patient");
@@ -6,9 +11,50 @@ function Signin() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleSubmit = (e: any) => {
+  const { signinMutationDoctor, signinMutationPatient } = useLogin();
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
-    // Perform your authentication logic here
+
+    // Check for empty required fields
+    const requiredFields = [
+      { value: email, label: "Email" },
+      { value: password, label: "Password" },
+    ];
+
+    const emptyField = requiredFields.find((field) => !field.value);
+
+    if (emptyField) {
+      toast.error(`${emptyField.label} is required`);
+      return;
+    }
+    if (role === "Doctor") {
+      try {
+        const result = await signinMutationDoctor.mutateAsync({
+          email,
+          password,
+        });
+        setJwt(result.jwt);
+        navigate("/doctor/dashboard");
+        console.log(result);
+      } catch (error) {
+        toast.error(error.message);
+      }
+    }
+    if (role === "Patient") {
+      try {
+        const result = await signinMutationPatient.mutateAsync({
+          email,
+          password,
+        });
+        setJwt(result.jwt);
+        navigate("/patient/dashboard");
+        console.log(result);
+      } catch (error) {
+        toast.error(error.message);
+      }
+    }
   };
 
   const togglePasswordVisibility = () => {
@@ -17,6 +63,18 @@ function Signin() {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-blue-200">
+      <button
+        className="absolute top-4 left-4 text-white"
+        onClick={() => getJwt()}
+      >
+        Get JWT
+      </button>
+      <button
+        className="absolute top-4 right-4 text-white"
+        onClick={() => setJwt("")}
+      >
+        Clear JWT
+      </button>
       <div className="w-full max-w-md rounded-lg border border-blue-300 bg-white">
         <div className="flex">
           <button

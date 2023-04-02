@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { toast } from "react-hot-toast";
-import { useAuth } from "../utils/useAuth";
+import { useSignup } from "../utils/useAuth";
+import { useNavigate } from "react-router-dom";
 
 function Signup() {
   const [role, setRole] = useState("Patient");
@@ -17,7 +18,8 @@ function Signup() {
   const [location, setLocation] = useState("");
   const [step, setStep] = useState(1);
 
-  const { signupMutation } = useAuth();
+  const { signupMutationDoctor, signupMutationPatient } = useSignup();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
@@ -35,13 +37,28 @@ function Signup() {
       return;
     }
 
-    if (role === "Doctor" && step === 2) {
+    if (step === 1) {
+      const emptyField = requiredFields.find((field) => !field.value);
+      if (emptyField) {
+        toast.error(`${emptyField.label} is required`);
+        return;
+      }
+      setStep(2);
+      return;
+    }
+
+    if (step === 2) {
       requiredFields.push(
         { value: firstName, label: "First Name" },
-        { value: lastName, label: "Last Name" },
-        { value: practice, label: "Practice" },
-        { value: location, label: "Location" }
+        { value: lastName, label: "Last Name" }
       );
+
+      if (role === "Doctor") {
+        requiredFields.push(
+          { value: practice, label: "Practice" },
+          { value: location, label: "Location" }
+        );
+      }
     }
 
     const emptyField = requiredFields.find((field) => !field.value);
@@ -51,26 +68,41 @@ function Signup() {
       return;
     }
 
-    if (role === "Doctor" && step === 1) {
-      setStep(2);
-    } else {
+    if (role === "Doctor") {
       const signUpData = {
         username,
         email,
         password,
-        practice,
         firstName,
         lastName,
+        practice,
         location,
       };
+
       try {
-        const response = await signupMutation.mutateAsync(signUpData);
+        const response = await signupMutationDoctor.mutateAsync(signUpData);
         console.log(response);
+        navigate("/doctor/dashboard");
         // Redirect to the doctor's dashboard or perform any other action after successful signup
       } catch (error) {
-        toast.error(
-          error.response.data.message || "An error occurred while signing up"
-        );
+        console.log(error)
+      }
+    } else if (role === "Patient") {
+      const signUpData = {
+        username,
+        email,
+        password,
+        firstName,
+        lastName,
+      };
+
+      try {
+        const response = await signupMutationPatient.mutateAsync(signUpData);
+        console.log(response);
+        navigate("/patient/dashboard");
+        // Redirect to the patient's dashboard or perform any other action after successful signup
+      } catch (error) {
+        console.log(error);
       }
     }
   };
@@ -97,12 +129,12 @@ function Signup() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-blue-200">
-      <div className="w-full max-w-md rounded-lg border border-blue-300 bg-white">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-300 to-indigo-100">
+      <div className="bg-white rounded-lg w-full max-w-md border-2 border-blue-300 shadow-2xl">
         <div className="flex">
           <button
             onClick={() => handleSetRole("Patient")}
-            className={`w-1/2 rounded-tl-md p-2 text-white ${
+            className={`w-1/2 p-2 text-white rounded-tl-md ${
               role === "Patient" ? "bg-blue-500" : "bg-blue-300"
             }`}
           >
@@ -110,7 +142,7 @@ function Signup() {
           </button>
           <button
             onClick={() => handleSetRole("Doctor")}
-            className={`w-1/2 rounded-tr-md p-4 text-white ${
+            className={`w-1/2 p-4 text-white rounded-tr-md ${
               role === "Doctor" ? "bg-blue-500" : "bg-blue-300"
             }`}
           >
@@ -118,21 +150,21 @@ function Signup() {
           </button>
         </div>
         <div className="m-6">
-          <h1 className="mb-4 text-2xl font-bold">Sign up as {role}</h1>
+          <h1 className="text-2xl font-bold mb-4">Sign up as {role}</h1>
           <form onSubmit={handleSubmit}>
             {step === 1 && (
               <>
                 <input
                   type="text"
                   placeholder="Username"
-                  className="mb-4 w-full rounded border p-2"
+                  className="w-full p-2 mb-4 border rounded"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                 />
                 <input
                   type="email"
                   placeholder="Email"
-                  className="mb-4 w-full rounded border p-2"
+                  className="w-full p-2 mb-4 border rounded"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
@@ -140,7 +172,7 @@ function Signup() {
                   <input
                     type={showPassword ? "text" : "password"}
                     placeholder="Password"
-                    className="mb-4 w-full rounded border p-2"
+                    className="w-full p-2 mb-4 border rounded"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                   />
@@ -156,7 +188,7 @@ function Signup() {
                   <input
                     type={showConfirmPassword ? "text" : "password"}
                     placeholder="Confirm Password"
-                    className="mb-4 w-full rounded border p-2"
+                    className="w-full p-2 mb-4 border rounded"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                   />
@@ -170,47 +202,55 @@ function Signup() {
                 </div>
               </>
             )}
-            {role === "Doctor" && step === 2 && (
+            {step === 2 && (
               <>
                 <input
                   type="text"
                   placeholder="First Name"
-                  className="mb-4 w-full rounded border p-2"
+                  className="w-full p-2 mb-4 border rounded"
                   value={firstName}
                   onChange={(e) => setFirstName(e.target.value)}
                 />
                 <input
                   type="text"
                   placeholder="Last Name"
-                  className="mb-4 w-full rounded border p-2"
+                  className="w-full p-2 mb-4 border rounded"
                   value={lastName}
                   onChange={(e) => setLastName(e.target.value)}
                 />
-                <input
-                  type="text"
-                  placeholder="Practice"
-                  className="mb-4 w-full rounded border p-2"
-                  value={practice}
-                  onChange={(e) => setPractice(e.target.value)}
-                />
-                <input
-                  type="text"
-                  placeholder="Location"
-                  className="mb-4 w-full rounded border p-2"
-                  value={location}
-                  onChange={(e) => setLocation(e.target.value)}
-                />
+                {role === "Doctor" && (
+                  <>
+                    <input
+                      type="text"
+                      placeholder="Practice"
+                      className="w-full p-2 mb-4 border rounded"
+                      value={practice}
+                      onChange={(e) => setPractice(e.target.value)}
+                    />
+                    <input
+                      type="text"
+                      placeholder="Location"
+                      className="w-full p-2 mb-4 border rounded"
+                      value={location}
+                      onChange={(e) => setLocation(e.target.value)}
+                    />
+                  </>
+                )}
               </>
             )}
             <button
               type="submit"
-              className="w-full rounded bg-blue-500 p-2 text-white"
+              className="w-full p-2 bg-blue-500 text-white rounded"
             >
-              {role === "Patient"
-                ? "Create Account"
-                : `Create Account (${step}/2)`}
+              {step === 1 ? "Next" : `Create Account (${step}/2)`}
             </button>
           </form>
+          <p className="text-center mt-4">
+            Already have an account?{" "}
+            <a href="/login" className="text-blue-500 underline">
+              Login
+            </a>
+          </p>
         </div>
       </div>
     </div>

@@ -10,24 +10,48 @@ const signupDoctor = async (data: {
   lastName: string;
   location: string;
 }) => {
-  const response = await axios.post(
-    "http://localhost:8000/doctor/signup",
-    data
-  );
+  const response = await axios.post("http://localhost:8000/user/doctor/signup", data);
   return response.data;
 };
 
-const signinDoctor = async (data: { email: string; password: string }) => {
-  const response = await axios.post(
-    "http://localhost:3000/doctor/signin",
-    data
-  );
+const signupPatient = async (data: {
+  username: string;
+  email: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+}) => {
+  const response = await axios.post("http://localhost:8000/user/patient/signup", data);
+  return response.data;
+}
+
+
+export const useSignup = () => {
+  const signupMutationDoctor = useMutation(signupDoctor);
+  const signupMutationPatient = useMutation(signupPatient);
+
+  return { signupMutationDoctor, signupMutationPatient  };
+};
+
+const signinDoctor = async (data: {
+  email: string;
+  password: string;
+}) => {
+  const response = await axios.post("http://localhost:8000/user/doctor/signin", data);
   return response.data;
 };
 
-export const useAuth = () => {
-  const signupMutation = useMutation(signupDoctor);
-  const signinMutation = useMutation(signinDoctor);
+const signinPatient = async (data: {
+  email: string;
+  password: string;
+}) => {
+  const response = await axios.post("http://localhost:8000/user/patient/signin", data);
+  return response.data;
+}
 
-  return { signupMutation, signinMutation };
-};
+export const useLogin = () => {
+  const signinMutationPatient = useMutation(signinPatient);
+  const signinMutationDoctor = useMutation(signinDoctor);
+
+  return { signinMutationPatient, signinMutationDoctor };
+}

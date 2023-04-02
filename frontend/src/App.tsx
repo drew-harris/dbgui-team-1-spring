@@ -61,7 +61,7 @@ const App: React.FC = () => {
         <Route path="/login" element={<Signin />} />
         <Route element={<DoctorRoute isLoggedIn={isLoggedIn} type={type} />}>
           <Route path="/doctor/dashboard" element={<DoctorDashboard />} />
-          <Route path="/doctor/discussions" element={<DoctorDiscussion/>} />
+          <Route path="/doctor/discussions" element={<DoctorDiscussion />} />
         </Route>
         <Route element={<PatientRoute isLoggedIn={isLoggedIn} type={type} />}>
           <Route path="/patient/dashboard" element={<PatientDashboard />} />

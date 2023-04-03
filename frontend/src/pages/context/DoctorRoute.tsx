@@ -1,19 +1,18 @@
 import { Navigate, Outlet } from "react-router-dom";
 
 interface DoctorRouteProps {
-    isLoggedIn: boolean;
-    type: string;
+  isLoggedIn: boolean;
+  type: string;
 }
 
-export default function DoctorRoute({isLoggedIn, type}: DoctorRouteProps) {
-    
-    if (!isLoggedIn) {
-        return <Navigate to="/login" />;
-    }
+export default function DoctorRoute({ isLoggedIn, type }: DoctorRouteProps) {
+  if (!isLoggedIn) {
+    return <Navigate to="/login" />;
+  }
 
-    if (type != "doctor" && isLoggedIn) {
-        return <Navigate to="/patient/dashboard" />;
-    }
-    
-    return <Outlet />;
-    }
+  if (type != "doctor" && isLoggedIn) {
+    return <Navigate to="/patient/dashboard" />;
+  }
+
+  return <Outlet />;
+}

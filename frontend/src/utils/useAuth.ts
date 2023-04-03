@@ -10,7 +10,10 @@ const signupDoctor = async (data: {
   lastName: string;
   location: string;
 }) => {
-  const response = await axios.post("http://localhost:8000/user/doctor/signup", data);
+  const response = await axios.post(
+    "http://localhost:8000/user/doctor/signup",
+    data
+  );
   return response.data;
 };
 
@@ -21,37 +24,39 @@ const signupPatient = async (data: {
   firstName: string;
   lastName: string;
 }) => {
-  const response = await axios.post("http://localhost:8000/user/patient/signup", data);
+  const response = await axios.post(
+    "http://localhost:8000/user/patient/signup",
+    data
+  );
   return response.data;
-}
-
+};
 
 export const useSignup = () => {
   const signupMutationDoctor = useMutation(signupDoctor);
   const signupMutationPatient = useMutation(signupPatient);
 
-  return { signupMutationDoctor, signupMutationPatient  };
+  return { signupMutationDoctor, signupMutationPatient };
 };
 
-const signinDoctor = async (data: {
-  email: string;
-  password: string;
-}) => {
-  const response = await axios.post("http://localhost:8000/user/doctor/signin", data);
+const signinDoctor = async (data: { email: string; password: string }) => {
+  const response = await axios.post(
+    "http://localhost:8000/user/doctor/signin",
+    data
+  );
   return response.data;
 };
 
-const signinPatient = async (data: {
-  email: string;
-  password: string;
-}) => {
-  const response = await axios.post("http://localhost:8000/user/patient/signin", data);
+const signinPatient = async (data: { email: string; password: string }) => {
+  const response = await axios.post(
+    "http://localhost:8000/user/patient/signin",
+    data
+  );
   return response.data;
-}
+};
 
 export const useLogin = () => {
   const signinMutationPatient = useMutation(signinPatient);
   const signinMutationDoctor = useMutation(signinDoctor);
 
   return { signinMutationPatient, signinMutationDoctor };
-}
+};

@@ -2,10 +2,10 @@
 import jwtDecode from "jwt-decode";
 
 interface JwtPayload {
-    id: string;
-    username: string;
-    email: string;
-    type: string;
+  id: string;
+  username: string;
+  email: string;
+  type: string;
 }
 
 export const getJwt = () => {
@@ -14,7 +14,9 @@ export const getJwt = () => {
   return jwt;
 };
 
-export const validateJwt = async (token: string): Promise<JwtPayload | null> => {
+export const validateJwt = async (
+  token: string
+): Promise<JwtPayload | null> => {
   try {
     const decoded = jwtDecode<JwtPayload>(token);
     // Add any additional validations or checks as needed.
@@ -30,4 +32,3 @@ export const setJwt = (token) => {
   console.log("setJwt", token);
   window.localStorage.setItem("jwt", token);
 };
-

@@ -1,36 +1,28 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
-import DoctorRoute from "./pages/context/DoctorRoute";
-import PatientRoute from "./pages/context/PatientRoute";
+import DoctorRoute from "./router/DoctorRoute";
+import PatientRoute from "./router/PatientRoute";
 
 import Signin from "./pages/Signin";
 import Signup from "./pages/Signup";
 
 import DoctorDashboard from "./pages/doctor/Dashboard";
 import DoctorDiscussion from "./pages/doctor/Discussions";
+import DoctorAppointment from "./pages/doctor/Appointments";
 
 import PatientDashboard from "./pages/patient/Dashboard";
 
-import { getJwt, validateJwt } from "./utils/jwt";
+import { AuthContext } from "./context/AuthContext";
 
 const App: React.FC = () => {
-  const [type, setType] = useState("");
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loading, setLoading] = useState(true);
+  const { user, updateToken } = useContext(AuthContext);
 
   useEffect(() => {
     const checkJwt = async () => {
-      const jwt = getJwt();
+      const jwt = window.localStorage.getItem("jwt");
       if (jwt) {
-        const decoded = await validateJwt(jwt);
-        if (decoded) {
-          setType(decoded.type);
-          setIsLoggedIn(true);
-        } else {
-          setIsLoggedIn(false);
-        }
-      } else {
-        setIsLoggedIn(false);
+        await updateToken(jwt);
       }
       setLoading(false);
     };
@@ -48,11 +40,14 @@ const App: React.FC = () => {
     return () => {
       window.removeEventListener("storage", handleStorageChange);
     };
-  }, []);
+  }, [updateToken]);
 
   if (loading) {
     return <div>Loading...</div>;
   }
+
+  const isLoggedIn = user !== null;
+  const type = user?.type || "";
 
   return (
     <>
@@ -62,10 +57,12 @@ const App: React.FC = () => {
         <Route element={<DoctorRoute isLoggedIn={isLoggedIn} type={type} />}>
           <Route path="/doctor/dashboard" element={<DoctorDashboard />} />
           <Route path="/doctor/discussions" element={<DoctorDiscussion />} />
+          <Route path="/doctor/appointments" element={<DoctorAppointment />} />
         </Route>
         <Route element={<PatientRoute isLoggedIn={isLoggedIn} type={type} />}>
           <Route path="/patient/dashboard" element={<PatientDashboard />} />
         </Route>
+        <Route path="*" element={<div>404 page not found</div>} />
       </Routes>
     </>
   );

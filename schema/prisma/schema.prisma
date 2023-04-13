@@ -73,7 +73,13 @@ model Prescription {
   doctor   Doctor @relation(fields: [doctorId], references: [id])
   doctorId String
 
+  medication String
+  dosage String
+  frequency String
+  duration String
+
   refills Refill[]
+  comment String
 }
 
 model Refill {
@@ -89,10 +95,11 @@ model Review {
   doctor   Doctor @relation(fields: [doctorId], references: [id])
   doctorId String
 
-  leftBy   Patient @relation(fields: [leftById], references: [id])
-  leftById String
+  patient  Patient @relation(fields: [patientId], references: [id])
+  patientId String
 
   rating Int
+  content String
 }
 
 model Discussion {

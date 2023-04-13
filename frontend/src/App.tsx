@@ -10,6 +10,7 @@ import DoctorDashboard from "./pages/doctor/Dashboard";
 import DoctorDiscussion from "./pages/doctor/Discussions";
 
 import PatientDashboard from "./pages/patient/Dashboard";
+import ChooseDoctor from "./pages/patient/ChooseDoctor";
 
 import { getJwt, validateJwt } from "./utils/jwt";
 
@@ -64,6 +65,7 @@ const App: React.FC = () => {
           <Route path="/doctor/discussions" element={<DoctorDiscussion />} />
         </Route>
         <Route element={<PatientRoute isLoggedIn={isLoggedIn} type={type} />}>
+          <Route path="/patient/doctors" element={<ChooseDoctor />} />
           <Route path="/patient/dashboard" element={<PatientDashboard />} />
         </Route>
       </Routes>

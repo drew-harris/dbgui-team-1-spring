@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { toast } from "react-hot-toast";
-import { useLogin } from "../utils/useAuth";
 import { useNavigate } from "react-router-dom";
-import { setJwt } from "../utils/jwt";
-import { getJwt } from "../utils/jwt";
+import { getJwt, setJwt } from "../utils/jwt";
+import { useLogin } from "../utils/useAuth";
 
 function Signin() {
   const [role, setRole] = useState("Patient");

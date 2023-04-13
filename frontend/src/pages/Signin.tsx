@@ -62,8 +62,8 @@ function Signin() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-blue-200">
-      <div className="w-full max-w-md rounded-lg border border-blue-300 bg-white">
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-r from-indigo-400 to-purple-400">
+      <div className="w-full max-w-md rounded-lg bg-white">
         <div className="flex">
           <button
             onClick={() => setRole("Patient")}
@@ -83,7 +83,9 @@ function Signin() {
           </button>
         </div>
         <div className="m-6">
-          <h1 className="mb-4 text-2xl font-bold">Sign in as {role}</h1>
+          <h1 className="mb-4 text-center text-2xl font-medium">
+            Sign in as <span className="text-blue-600">{role}</span>!
+          </h1>
           <form onSubmit={handleSubmit}>
             <input
               type="email"

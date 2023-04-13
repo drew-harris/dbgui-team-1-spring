@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import { getJwt, setJwt } from "../utils/jwt";
 import { useLogin } from "../utils/useAuth";
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
 
 function Signin() {
   const [role, setRole] = useState("Patient");
@@ -12,11 +13,11 @@ function Signin() {
 
   const { signinMutationDoctor, signinMutationPatient } = useLogin();
   const navigate = useNavigate();
+  const { updateToken } = useContext(AuthContext);
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
 
-    // Check for empty required fields
     const requiredFields = [
       { value: email, label: "Email" },
       { value: password, label: "Password" },
@@ -34,7 +35,7 @@ function Signin() {
           email,
           password,
         });
-        setJwt(result.jwt);
+        await updateToken(result.jwt);
         navigate("/doctor/dashboard");
         console.log(result);
       } catch (error) {
@@ -47,7 +48,7 @@ function Signin() {
           email,
           password,
         });
-        setJwt(result.jwt);
+        await updateToken(result.jwt);
         navigate("/patient/dashboard");
         console.log(result);
       } catch (error) {
@@ -62,18 +63,6 @@ function Signin() {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-blue-200">
-      <button
-        className="absolute top-4 left-4 text-white"
-        onClick={() => getJwt()}
-      >
-        Get JWT
-      </button>
-      <button
-        className="absolute top-4 right-4 text-white"
-        onClick={() => setJwt("")}
-      >
-        Clear JWT
-      </button>
       <div className="w-full max-w-md rounded-lg border border-blue-300 bg-white">
         <div className="flex">
           <button

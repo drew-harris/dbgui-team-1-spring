@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { toast } from "react-hot-toast";
 import { useSignup } from "../utils/useAuth";
 import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
 
 function Signup() {
   const [role, setRole] = useState("Patient");
@@ -20,6 +22,8 @@ function Signup() {
 
   const { signupMutationDoctor, signupMutationPatient } = useSignup();
   const navigate = useNavigate();
+
+  const { updateToken } = useContext(AuthContext);
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
@@ -82,8 +86,8 @@ function Signup() {
       try {
         const response = await signupMutationDoctor.mutateAsync(signUpData);
         console.log(response);
+        await updateToken(response.jwt);
         navigate("/doctor/dashboard");
-        // Redirect to the doctor's dashboard or perform any other action after successful signup
       } catch (error) {
         console.log(error);
       }
@@ -99,8 +103,8 @@ function Signup() {
       try {
         const response = await signupMutationPatient.mutateAsync(signUpData);
         console.log(response);
+        await updateToken(response.jwt);
         navigate("/patient/dashboard");
-        // Redirect to the patient's dashboard or perform any other action after successful signup
       } catch (error) {
         console.log(error);
       }

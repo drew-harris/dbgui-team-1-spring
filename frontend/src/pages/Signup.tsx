@@ -133,8 +133,8 @@ function Signup() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-r from-blue-300 to-indigo-100">
-      <div className="w-full max-w-md rounded-lg border-2 border-blue-300 bg-white shadow-2xl">
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-r from-indigo-400 to-purple-400">
+      <div className="w-full max-w-md rounded-lg bg-white shadow-2xl">
         <div className="flex">
           <button
             onClick={() => handleSetRole("Patient")}
@@ -154,7 +154,9 @@ function Signup() {
           </button>
         </div>
         <div className="m-6">
-          <h1 className="mb-4 text-2xl font-bold">Sign up as {role}</h1>
+          <h1 className="mb-4 text-center text-2xl font-medium">
+            Create a <span className="text-blue-600">{role}</span> Account!
+          </h1>
           <form onSubmit={handleSubmit}>
             {step === 1 && (
               <>

@@ -14,7 +14,6 @@ function Signin() {
   const { signinMutationDoctor, signinMutationPatient } = useLogin();
   const navigate = useNavigate();
   const { updateToken } = useContext(AuthContext);
-
   const handleSubmit = async (e: any) => {
     e.preventDefault();
 

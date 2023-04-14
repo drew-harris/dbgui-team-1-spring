@@ -1,5 +1,6 @@
 import { useMutation } from "react-query";
 import axios from "axios";
+import { toast } from "react-hot-toast";
 
 const signupDoctor = async (data: {
   username: string;
@@ -51,11 +52,19 @@ const signinPatient = async (data: { email: string; password: string }) => {
     "http://localhost:8000/user/patient/signin",
     data
   );
+  if (response.status !== 200 ) {
+    throw new Error(response.data.error.message || "Something went wrong");
+  }
   return response.data;
 };
 
 export const useLogin = () => {
-  const signinMutationPatient = useMutation(signinPatient);
+  const signinMutationPatient = useMutation(signinPatient, {
+    onError: (error: any) => {
+      toast.error(error?.message || "Something went wrong");
+    },
+    // Add use success
+  });
   const signinMutationDoctor = useMutation(signinDoctor);
 
   return { signinMutationPatient, signinMutationDoctor };

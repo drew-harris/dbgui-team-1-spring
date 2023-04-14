@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import { getJwt, setJwt } from "../utils/jwt";
 import { useLogin } from "../utils/useAuth";
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
 
 function Signin() {
   const [role, setRole] = useState("Patient");
@@ -12,11 +13,11 @@ function Signin() {
 
   const { signinMutationDoctor, signinMutationPatient } = useLogin();
   const navigate = useNavigate();
+  const { updateToken } = useContext(AuthContext);
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
 
-    // Check for empty required fields
     const requiredFields = [
       { value: email, label: "Email" },
       { value: password, label: "Password" },
@@ -34,7 +35,7 @@ function Signin() {
           email,
           password,
         });
-        setJwt(result.jwt);
+        await updateToken(result.jwt);
         navigate("/doctor/dashboard");
         console.log(result);
       } catch (error) {
@@ -47,7 +48,7 @@ function Signin() {
           email,
           password,
         });
-        setJwt(result.jwt);
+        await updateToken(result.jwt);
         navigate("/patient/dashboard");
         console.log(result);
       } catch (error) {
@@ -63,13 +64,13 @@ function Signin() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-blue-200">
       <button
-        className="absolute left-4 top-4 text-white"
+        className="absolute top-4 left-4 text-white"
         onClick={() => getJwt()}
       >
         Get JWT
       </button>
       <button
-        className="absolute right-4 top-4 text-white"
+        className="absolute top-4 right-4 text-white"
         onClick={() => setJwt("")}
       >
         Clear JWT
@@ -94,7 +95,9 @@ function Signin() {
           </button>
         </div>
         <div className="m-6">
-          <h1 className="mb-4 text-2xl font-bold">Sign in as {role}</h1>
+          <h1 className="mb-4 text-center text-2xl font-medium">
+            Sign in as <span className="text-blue-600">{role}</span>!
+          </h1>
           <form onSubmit={handleSubmit}>
             <input
               type="email"

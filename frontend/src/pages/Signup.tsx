@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { toast } from "react-hot-toast";
 import { useSignup } from "../utils/useAuth";
 import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
 
 function Signup() {
   const [role, setRole] = useState("Patient");
@@ -20,6 +22,8 @@ function Signup() {
 
   const { signupMutationDoctor, signupMutationPatient } = useSignup();
   const navigate = useNavigate();
+
+  const { updateToken } = useContext(AuthContext);
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
@@ -82,8 +86,8 @@ function Signup() {
       try {
         const response = await signupMutationDoctor.mutateAsync(signUpData);
         console.log(response);
+        await updateToken(response.jwt);
         navigate("/doctor/dashboard");
-        // Redirect to the doctor's dashboard or perform any other action after successful signup
       } catch (error) {
         console.log(error);
       }
@@ -99,8 +103,8 @@ function Signup() {
       try {
         const response = await signupMutationPatient.mutateAsync(signUpData);
         console.log(response);
+        await updateToken(response.jwt);
         navigate("/patient/dashboard");
-        // Redirect to the patient's dashboard or perform any other action after successful signup
       } catch (error) {
         console.log(error);
       }
@@ -129,8 +133,8 @@ function Signup() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-r from-blue-300 to-indigo-100">
-      <div className="w-full max-w-md rounded-lg border-2 border-blue-300 bg-white shadow-2xl">
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-r from-indigo-400 to-purple-400">
+      <div className="w-full max-w-md rounded-lg bg-white shadow-2xl">
         <div className="flex">
           <button
             onClick={() => handleSetRole("Patient")}
@@ -150,7 +154,9 @@ function Signup() {
           </button>
         </div>
         <div className="m-6">
-          <h1 className="mb-4 text-2xl font-bold">Sign up as {role}</h1>
+          <h1 className="mb-4 text-center text-2xl font-medium">
+            Create a <span className="text-blue-600">{role}</span> Account!
+          </h1>
           <form onSubmit={handleSubmit}>
             {step === 1 && (
               <>

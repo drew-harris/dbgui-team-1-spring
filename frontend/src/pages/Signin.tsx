@@ -63,13 +63,13 @@ function Signin() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-blue-200">
       <button
-        className="absolute top-4 left-4 text-white"
+        className="absolute left-4 top-4 text-white"
         onClick={() => getJwt()}
       >
         Get JWT
       </button>
       <button
-        className="absolute top-4 right-4 text-white"
+        className="absolute right-4 top-4 text-white"
         onClick={() => setJwt("")}
       >
         Clear JWT

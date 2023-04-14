@@ -13,6 +13,9 @@ export default function DoctorRoute({ isLoggedIn, type }: DoctorRouteProps) {
   if (type != "doctor" && isLoggedIn) {
     return <Navigate to="/patient/dashboard" />;
   }
+  if (type == "doctor" && isLoggedIn) {
+    return <Navigate to="/doctor/dashboard" />;
+  }
 
   return <Outlet />;
 }

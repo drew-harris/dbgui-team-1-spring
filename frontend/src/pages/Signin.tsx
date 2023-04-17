@@ -1,9 +1,6 @@
 import { useState } from "react";
 import { toast } from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
 import { useLogin } from "../utils/useAuth";
-import { useContext } from "react";
-import { AuthContext } from "../context/AuthContext";
 
 function Signin() {
   const [role, setRole] = useState("Patient");
@@ -12,47 +9,25 @@ function Signin() {
   const [showPassword, setShowPassword] = useState(false);
 
   const { signinMutationDoctor, signinMutationPatient } = useLogin();
-  const navigate = useNavigate();
-  const { updateToken } = useContext(AuthContext);
+
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-
     const requiredFields = [
       { value: email, label: "Email" },
       { value: password, label: "Password" },
     ];
-
     const emptyField = requiredFields.find((field) => !field.value);
 
     if (emptyField) {
       toast.error(`${emptyField.label} is required`);
       return;
     }
+
     if (role === "Doctor") {
-      try {
-        const result = await signinMutationDoctor.mutateAsync({
-          email,
-          password,
-        });
-        await updateToken(result.jwt);
-        navigate("/doctor/dashboard");
-        console.log(result);
-      } catch (error) {
-        toast.error(error.message);
-      }
+      signinMutationDoctor.mutate({ email, password });
     }
     if (role === "Patient") {
-      try {
-        const result = await signinMutationPatient.mutateAsync({
-          email,
-          password,
-        });
-        await updateToken(result.jwt);
-        navigate("/patient/dashboard");
-        console.log(result);
-      } catch (error) {
-        toast.error(error.message);
-      }
+      signinMutationPatient.mutate({ email, password });
     }
   };
 

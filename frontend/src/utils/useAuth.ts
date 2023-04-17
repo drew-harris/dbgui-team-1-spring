@@ -1,16 +1,12 @@
 import { useMutation } from "react-query";
 import axios from "axios";
 import { toast } from "react-hot-toast";
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
-const signupDoctor = async (data: {
-  username: string;
-  email: string;
-  password: string;
-  practice: string;
-  firstName: string;
-  lastName: string;
-  location: string;
-}) => {
+
+const signupDoctor = async (data) => {
   const response = await axios.post(
     "http://localhost:8000/user/doctor/signup",
     data
@@ -18,13 +14,7 @@ const signupDoctor = async (data: {
   return response.data;
 };
 
-const signupPatient = async (data: {
-  username: string;
-  email: string;
-  password: string;
-  firstName: string;
-  lastName: string;
-}) => {
+const signupPatient = async (data) => {
   const response = await axios.post(
     "http://localhost:8000/user/patient/signup",
     data
@@ -33,8 +23,28 @@ const signupPatient = async (data: {
 };
 
 export const useSignup = () => {
-  const signupMutationDoctor = useMutation(signupDoctor);
-  const signupMutationPatient = useMutation(signupPatient);
+  const { updateToken } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const signupMutationDoctor = useMutation(signupDoctor, {
+    onError: (error: any) => {
+      toast.error(error?.message || "Something went wrong");
+    },
+    onSuccess: (data: any) => {
+      updateToken(data.jwt);
+      navigate("/doctor/dashboard");
+    },
+  });
+
+  const signupMutationPatient = useMutation(signupPatient, {
+    onError: (error: any) => {
+      toast.error(error?.message || "Something went wrong");
+    },
+    onSuccess: (data: any) => {
+      updateToken(data.jwt);
+      navigate("/patient/dashboard");
+    },
+  });
 
   return { signupMutationDoctor, signupMutationPatient };
 };
@@ -58,14 +68,30 @@ const signinPatient = async (data: { email: string; password: string }) => {
   return response.data;
 };
 
+
 export const useLogin = () => {
+  const { updateToken } = useContext(AuthContext);
+  const navigate = useNavigate();
+
   const signinMutationPatient = useMutation(signinPatient, {
     onError: (error: any) => {
       toast.error(error?.message || "Something went wrong");
     },
-    // Add use success
+    onSuccess: (data: any) => {
+      updateToken(data.jwt);
+      navigate("/patient/dashboard");
+    },
   });
-  const signinMutationDoctor = useMutation(signinDoctor);
+
+  const signinMutationDoctor = useMutation(signinDoctor, {
+    onError: (error: any) => {
+      toast.error(error?.message || "Something went wrong");
+    },
+    onSuccess: (data: any) => {
+      updateToken(data.jwt);
+      navigate("/doctor/dashboard");
+    },
+  });
 
   return { signinMutationPatient, signinMutationDoctor };
 };

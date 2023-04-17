@@ -1,9 +1,6 @@
 import React, { useState } from "react";
 import { toast } from "react-hot-toast";
 import { useSignup } from "../utils/useAuth";
-import { useNavigate } from "react-router-dom";
-import { useContext } from "react";
-import { AuthContext } from "../context/AuthContext";
 
 function Signup() {
   const [role, setRole] = useState("Patient");
@@ -21,14 +18,10 @@ function Signup() {
   const [step, setStep] = useState(1);
 
   const { signupMutationDoctor, signupMutationPatient } = useSignup();
-  const navigate = useNavigate();
-
-  const { updateToken } = useContext(AuthContext);
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
 
-    // Check for empty required fields
     const requiredFields = [
       { value: username, label: "Username" },
       { value: email, label: "Email" },
@@ -83,14 +76,7 @@ function Signup() {
         location,
       };
 
-      try {
-        const response = await signupMutationDoctor.mutateAsync(signUpData);
-        console.log(response);
-        await updateToken(response.jwt);
-        navigate("/doctor/dashboard");
-      } catch (error) {
-        console.log(error);
-      }
+      signupMutationDoctor.mutate(signUpData);
     } else if (role === "Patient") {
       const signUpData = {
         username,
@@ -100,14 +86,7 @@ function Signup() {
         lastName,
       };
 
-      try {
-        const response = await signupMutationPatient.mutateAsync(signUpData);
-        console.log(response);
-        await updateToken(response.jwt);
-        navigate("/patient/dashboard");
-      } catch (error) {
-        console.log(error);
-      }
+      signupMutationPatient.mutate(signUpData);
     }
   };
 

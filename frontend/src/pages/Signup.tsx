@@ -104,7 +104,7 @@ function Signup() {
         const response = await signupMutationPatient.mutateAsync(signUpData);
         console.log(response);
         await updateToken(response.jwt);
-        navigate("/patient/dashboard");
+        navigate("/patient/doctors");
       } catch (error) {
         console.log(error);
       }

@@ -10,6 +10,7 @@ import { discussionRouter } from "./routers/discussionRouter";
 import { appointmentRouter } from "./routers/appointmentRouter";
 import { prescriptionRouter } from "./routers/prescriptionRouter";
 import { reviewRouter } from "./routers/reviewsRouter";
+import { scheduleRouter } from "./routers/scheduleRouter";
 // Load enviornment variables from .env file
 dotenv.config();
 
@@ -28,6 +29,7 @@ app.use("/user", userRouter);
 app.use("/doctors", doctorRouter);
 app.use("/discussions", discussionRouter);
 app.use("/appointments", appointmentRouter);
+app.use("/schedules", scheduleRouter);
 app.use("/protected", protectedRouter);
 app.use("/reviews", reviewRouter);
 app.use("/prescriptions", prescriptionRouter);

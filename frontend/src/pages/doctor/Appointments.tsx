@@ -1,11 +1,14 @@
-export default function Appointments() {
+import React from "react";
+import { Appointments } from "../../components/appointments/Appointments";
+import NavBar from "../../components/all/NavBar";
+
+function Appointment() {
   return (
-    <>
-      <div className="flex h-screen flex-col items-center justify-center">
-        <div className="flex flex-col items-center justify-center rounded-lg bg-white p-8 shadow-lg">
-          <h1 className="mb-4 text-2xl font-bold">Appointments</h1>
-        </div>
-      </div>
-    </>
+    <div className="App">
+      <NavBar />
+      <Appointments />
+    </div>
   );
 }
+
+export default Appointment;

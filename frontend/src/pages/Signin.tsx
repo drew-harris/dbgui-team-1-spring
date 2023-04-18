@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { toast } from "react-hot-toast";
-import { useLogin } from "../utils/useAuth";
+import { useLogin } from "../hooks/useAuth";
 
 function Signin() {
   const [role, setRole] = useState("Patient");

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { toast } from "react-hot-toast";
-import { useSignup } from "../utils/useAuth";
+import { useSignup } from "../hooks/useAuth";
 
 function Signup() {
   const [role, setRole] = useState("Patient");

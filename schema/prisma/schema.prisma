@@ -46,6 +46,9 @@ model Doctor {
 
   discussions Discussion[]
   comments    Comment[]
+
+  scheduleStartTime Int @default(8)
+  scheduleEndTime   Int @default(17)
 }
 
 model Appointment {

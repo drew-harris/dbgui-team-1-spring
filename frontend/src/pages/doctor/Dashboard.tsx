@@ -1,6 +1,7 @@
 import Button from "@mui/material/Button";
 import React, { useContext, useEffect } from "react";
 import { AuthContext } from "../../context/AuthContext";
+import NavBar from "../../components/all/NavBar";
 
 export default function Dashboard() {
   const { user } = useContext(AuthContext);
@@ -10,9 +11,10 @@ export default function Dashboard() {
   }, [user]);
 
   return (
-    <div>
+    <>
+      <NavBar />
       <h1>Doctor Dashboard</h1>
       <Button>Test MUI Button</Button>
-    </div>
+    </>
   );
 }

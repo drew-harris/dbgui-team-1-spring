@@ -1,9 +1,14 @@
-import Calendar from "../../components/appointments/calendar";
+import React from "react";
+import { Appointments } from "../../components/appointments/Appointments";
+import NavBar from "../../components/all/NavBar";
 
-export default function Appointments() {
+function Appointment() {
   return (
-    <>
-      <Calendar />
-    </>
+    <div className="App">
+      <NavBar />
+      <Appointments />
+    </div>
   );
 }
+
+export default Appointment;

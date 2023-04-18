@@ -8,7 +8,9 @@ import Signup from "./pages/Signup";
 
 import DoctorDashboard from "./pages/doctor/Dashboard";
 import DoctorDiscussion from "./pages/doctor/Discussions";
-import DoctorAppointment from "./pages/doctor/Appointments";
+import DoctorAppointments from "./pages/doctor/Appointments";
+import DoctorAppointment from "./pages/doctor/Appointment";
+import DoctorSchedule from "./pages/doctor/Schedule";
 
 import PatientDashboard from "./pages/patient/Dashboard";
 import ChooseDoctor from "./pages/patient/ChooseDoctor";
@@ -58,7 +60,12 @@ const App: React.FC = () => {
         <Route element={<DoctorRoute isLoggedIn={isLoggedIn} type={type} />}>
           <Route path="/doctor/dashboard" element={<DoctorDashboard />} />
           <Route path="/doctor/discussions" element={<DoctorDiscussion />} />
-          <Route path="/doctor/appointments" element={<DoctorAppointment />} />
+          <Route path="/doctor/appointments" element={<DoctorAppointments />} />
+          <Route path="/doctor/schedule" element={<DoctorSchedule />} />
+          <Route
+            path="/doctor/appointments/:id"
+            element={<DoctorAppointment />}
+          />
         </Route>
         <Route element={<PatientRoute isLoggedIn={isLoggedIn} type={type} />}>
           <Route path="/patient/doctors" element={<ChooseDoctor />} />

@@ -2,6 +2,7 @@ import { Fragment, useRef, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import { AppointmentData } from "../../hooks/useAppointments";
+import { useAppointments } from "../../hooks/useAppointments";
 
 interface CancelAppointmentModalProps {
   open: boolean;
@@ -19,6 +20,13 @@ export default function CancelAppointmentModal({
   const appointmentDate = new Date(appointment.time);
   const dateString = appointmentDate.toLocaleDateString();
   const timeString = appointmentDate.toLocaleTimeString();
+
+  const { cancelAppointment } = useAppointments();
+
+  const handleProceed = async () => {
+    await cancelAppointment(appointment.id);
+    setOpen(false);
+  };
 
   return (
     <Transition.Root show={open} as={Fragment}>
@@ -76,11 +84,9 @@ export default function CancelAppointmentModal({
                           Date: {dateString} <br />
                           Time: {timeString} <br />
                           Doctor: {appointment.doctor.firstName}{" "}
-                          {appointment.doctor.lastName} (
-                          {appointment.doctor.username}) <br />
+                          {appointment.doctor.lastName} <br />
                           Patient: {appointment.patient.firstName}{" "}
-                          {appointment.patient.lastName} (
-                          {appointment.patient.username}) <br />
+                          {appointment.patient.lastName} <br />
                           Reason: {appointment.reason}
                         </p>
                       </div>
@@ -91,7 +97,7 @@ export default function CancelAppointmentModal({
                   <button
                     type="button"
                     className="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto"
-                    onClick={() => setOpen(false)}
+                    onClick={() => handleProceed()}
                   >
                     Proceed
                   </button>

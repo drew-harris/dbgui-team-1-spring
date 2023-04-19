@@ -1,4 +1,3 @@
-// src/hooks/useAppointments.ts
 import { Doctor, Patient, Appointment } from "@prisma/client";
 import { useMutation, useQueryClient, useQuery } from "react-query";
 import axios from "axios";
@@ -23,12 +22,11 @@ export interface AppointmentData {
   isPlaceholder: boolean;
 }
 
-
-export const useAppointments = () => {
+export const useAppointments = (doctorId: string) => {
   const queryClient = useQueryClient();
 
   const getAppointments = async (): Promise<AppointmentData[]> => {
-    const { data } = await apiClient.get<AppointmentData[]>('/appointments');
+    const { data } = await apiClient.get<AppointmentData[]>(`/appointments?doctorId=${doctorId}`);
     return data;
   };
 
@@ -40,7 +38,7 @@ export const useAppointments = () => {
   };
 
   const cancelAppointment = async (appointmentId: string): Promise<{ success: true }> => {
-    const { data } = await axios.delete<{ success: true }>(`http://localhost:8000/appointments/${appointmentId}`);
+    const { data } = await apiClient.delete<{ success: true }>(`http://localhost:8000/appointments/${appointmentId}`);
     return data;
   };
 

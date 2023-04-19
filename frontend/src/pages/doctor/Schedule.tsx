@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useAppointments, AppointmentData } from "../../hooks/useAppointments";
 import NavBar from "../../components/all/NavBar";
 import moment from "moment";
+import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../context/AuthContext";
 
 interface PlaceholderAppointment {
   id: number;
@@ -18,6 +20,7 @@ interface PlaceholderAppointment {
 type CombinedAppointment = AppointmentData | PlaceholderAppointment;
 
 function Schedule() {
+  const { user } = useContext(AuthContext);
   const {
     appointments,
     isLoading,
@@ -27,13 +30,14 @@ function Schedule() {
     cancelAppointment,
     approveAppointment,
     rejectAppointment,
-  } = useAppointments();
+  } = useAppointments(user.id);
 
   const [selectedDay, setSelectedDay] = useState(moment().startOf("day"));
 
   const handleDayChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedDay(moment(event.target.value).startOf("day"));
   };
+  const navigate = useNavigate();
 
   const generateTimeSlots = (startHour: number, endHour: number) => {
     const slots = [];
@@ -56,7 +60,14 @@ function Schedule() {
       );
 
       return existingAppointments?.length
-        ? existingAppointments
+        ? existingAppointments.map((appointment) => ({
+            ...appointment,
+            status: appointment.approved
+              ? "Approved"
+              : appointment.isPlaceholder
+              ? "Empty"
+              : "Pending",
+          }))
         : [
             {
               id: slot.valueOf(),
@@ -65,6 +76,7 @@ function Schedule() {
               reason: "",
               approved: false,
               isPlaceholder: true,
+              status: "Empty",
             },
           ];
     }
@@ -76,8 +88,16 @@ function Schedule() {
   return (
     <>
       <NavBar />
-      <div className="container mx-auto px-4 py-4">
-        <h1 className="my-4 text-3xl font-semibold">Doctor Schedule</h1>
+      <div className="container mx-auto px-4 py-8">
+        <div className="mb-6 flex items-center justify-between">
+          <h1 className="text-3xl font-semibold">Schedule</h1>
+          <button
+            onClick={() => navigate("/doctor/appointments/new")}
+            className="rounded-md bg-indigo-500 px-6 py-2 font-bold text-white hover:bg-indigo-700"
+          >
+            Change Schedule
+          </button>
+        </div>
         <div className="mb-4">
           <label className="mr-2 font-medium">Select Day:</label>
           <input
@@ -88,7 +108,7 @@ function Schedule() {
         </div>
         <div className="overflow-x-auto">
           <table className="mx-0 min-w-full divide-y divide-gray-200 border border-blue-300">
-            <thead className="bg-blue-500">
+            <thead className="bg-indigo-500">
               <tr>
                 <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-white">
                   Time
@@ -114,12 +134,12 @@ function Schedule() {
                     <tr
                       key={appointment.id}
                       className={
-                        index % 2 === 0 && subIndex === 0 ? "bg-blue-100" : ""
+                        index % 2 === 0 && subIndex === 0 ? "bg-blue-50" : ""
                       }
                     >
                       <td className="whitespace-nowrap px-6 py-4 text-sm font-medium">
                         {subIndex === 0 &&
-                          moment(appointment.time).format("HH:mm")}
+                          moment(appointment.time).format("hh:mm A")}
                       </td>
                       <td className="whitespace-nowrap px-6 py-4 text-sm font-medium">
                         {appointment.patient.firstName}{" "}
@@ -129,7 +149,17 @@ function Schedule() {
                         {appointment.reason}
                       </td>
                       <td className="whitespace-nowrap px-6 py-4 text-sm font-medium">
-                        {appointment.approved ? "Approved" : "Pending"}
+                        <span
+                          className={`inline-block rounded-full px-3 py-1 text-xs font-semibold ${
+                            appointment.status === "Approved"
+                              ? "bg-green-200 text-green-800"
+                              : appointment.status === "Empty"
+                              ? "bg-gray-200 text-gray-800"
+                              : "bg-yellow-200 text-yellow-800"
+                          }`}
+                        >
+                          {appointment.status}
+                        </span>
                       </td>
                       <td className="px-6 py-4 text-sm font-medium">
                         {appointment.isPlaceholder ? (
@@ -143,7 +173,7 @@ function Schedule() {
                                 isPlaceholder: false,
                               })
                             }
-                            className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
+                            className="rounded bg-indigo-500 px-4 py-2 font-bold text-white hover:bg-indigo-700"
                           >
                             Schedule
                           </button>
@@ -188,4 +218,5 @@ function Schedule() {
     </>
   );
 }
+
 export default Schedule;

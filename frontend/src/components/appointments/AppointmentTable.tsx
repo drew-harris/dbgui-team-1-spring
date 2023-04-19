@@ -32,7 +32,7 @@ export const AppointmentTable: React.FC<AppointmentTableProps> = ({
       )}
       <div className="overflow-x-auto">
         <table className="mx-0 min-w-full divide-y divide-gray-200 border border-blue-300">
-          <thead className="bg-blue-500">
+          <thead className="bg-indigo-500">
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-white">
                 Date
@@ -66,7 +66,7 @@ export const AppointmentTable: React.FC<AppointmentTableProps> = ({
               return (
                 <tr
                   key={appointment.id}
-                  className={index % 2 === 0 ? "bg-blue-100" : ""}
+                  className={index % 2 === 0 ? "bg-indigo-100" : ""}
                 >
                   <td className="whitespace-nowrap px-6 py-4 text-sm font-medium">
                     {dateString}
@@ -99,7 +99,7 @@ export const AppointmentTable: React.FC<AppointmentTableProps> = ({
                         onClick={() =>
                           navigate(`/doctor/appointments/${appointment.id}`)
                         }
-                        className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
+                        className="rounded bg-indigo-500 px-4 py-2 font-bold text-white hover:bg-indigo-700"
                       >
                         Edit
                       </button>

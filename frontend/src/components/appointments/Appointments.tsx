@@ -1,11 +1,13 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useAppointments } from "../../hooks/useAppointments";
 import { AppointmentTable } from "./AppointmentTable";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../context/AuthContext";
 
 export const Appointments: React.FC = () => {
-  const { appointments, isLoading, error, refetch } = useAppointments();
   const navigate = useNavigate();
+  const { user } = useContext(AuthContext);
+  const { appointments, isLoading, error, refetch } = useAppointments(user.id);
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -36,10 +38,10 @@ export const Appointments: React.FC = () => {
       <div className="mb-6 flex items-center justify-between">
         <h1 className="text-3xl font-semibold">Appointments</h1>
         <button
-          onClick={() => navigate("/doctor/schedule")}
-          className="rounded-md bg-blue-500 px-6 py-2 font-bold text-white hover:bg-blue-700"
+          onClick={() => navigate("/doctor/appointments/new")}
+          className="rounded-md bg-indigo-500 px-6 py-2 font-bold text-white hover:bg-indigo-700"
         >
-          Post & View Schedule
+          New Appointment
         </button>
       </div>
       <div className="mb-6">

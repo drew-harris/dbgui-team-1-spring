@@ -22,7 +22,7 @@ function Schedule() {
     appointments,
     isLoading,
     error,
-    refetch,
+    //refetch,
     createAppointment,
     cancelAppointment,
     approveAppointment,

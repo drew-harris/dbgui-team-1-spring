@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 // src/hooks/useAppointments.ts
 import { Doctor, Patient, Appointment } from "@prisma/client";
 import { useMutation, useQueryClient, useQuery } from "react-query";

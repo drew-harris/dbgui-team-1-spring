@@ -1,6 +1,10 @@
+/* eslint-disable no-unused-vars */
 import Button from "@mui/material/Button";
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect} from "react";
 import { AuthContext } from "../../context/AuthContext";
+import { useNavigate } from 'react-router-dom';
+
+
 
 export default function Dashboard() {
   const { user } = useContext(AuthContext);
@@ -13,10 +17,13 @@ export default function Dashboard() {
 
 
   return (
-    <>
-      <NavBar />
+    <div>
+
       <h1>Doctor Dashboard</h1>
       <Button>Test MUI Button</Button>
+      <Button onClick={() => navigate("/doctor/discussions")}>
+        Discussions
+      </Button>
     </div>
   );
 }

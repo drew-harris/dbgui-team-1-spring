@@ -1,8 +1,6 @@
 import TextField from "@mui/material/TextField";
 import { useEffect, useState } from "react";
-import PostCard from "../../components/discussions/Postcard";
-import Stack from '@mui/joy/Stack';
-
+//import MakePostCard from "../../components/discussions/PostCard";
 
 export default function Discussions() {
   const [discussions, setDiscussions] = useState(null);
@@ -17,7 +15,6 @@ export default function Discussions() {
 
     setDiscussions(data);
   };
-
   useEffect(() => {
     fetchData();
   }, []);
@@ -28,7 +25,9 @@ export default function Discussions() {
         <h1>Discussions</h1>
       </div>
       <div>{JSON.stringify(discussions)}</div>
-      <PostCard/>
+      {/*<Stack>
+              {discussions.length > 0? discussions.map(MakePostCard) : <div> Be the first to add a post!</div>}
+  </Stack>*/}
       <div>
         <form>
           <TextField id="outlined-basic" label="Outlined" variant="outlined" />

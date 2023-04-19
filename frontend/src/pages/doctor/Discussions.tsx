@@ -1,38 +1,49 @@
-import TextField from "@mui/material/TextField";
+import { Container, Typography, Card, CardContent, CardHeader, Grid } from '@mui/material';
 import { useEffect, useState } from "react";
-//import MakePostCard from "../../components/discussions/PostCard";
+import AddDiscussionForm from '../../components/discussions/AddPost';
+import axios from 'axios';
 
 export default function Discussions() {
-  const [discussions, setDiscussions] = useState(null);
+  const [discussions, setDiscussions] = useState([]);
 
   const fetchData = async () => {
-    const response = await fetch("http://localhost:8000/discussions/", {
+    try{
+    const response = await axios.get("http://localhost:8000/discussions/", {
       headers: {
         authorization: localStorage.getItem("jwt"),
       },
     });
-    const data = await response.json();
-
-    setDiscussions(data);
+    setDiscussions(response.data);
+    } catch(error) {
+    console.error('Error fetching discussions:', error);
+    }
   };
+
   useEffect(() => {
     fetchData();
   }, []);
 
   return (
-    <main>
-      <div>
-        <h1>Discussions</h1>
-      </div>
-      <div>{JSON.stringify(discussions)}</div>
-      {/*<Stack>
-              {discussions.length > 0? discussions.map(MakePostCard) : <div> Be the first to add a post!</div>}
-  </Stack>*/}
-      <div>
-        <form>
-          <TextField id="outlined-basic" label="Outlined" variant="outlined" />
-        </form>
-      </div>
-    </main>
+    <Container>
+      <Typography variant="h3" component="h1" gutterBottom>
+        Discussion Board
+      </Typography>
+      <AddDiscussionForm onAdd={fetchData} />
+      <Grid container spacing={3}>
+        {discussions.map((discussion) => (
+          <Grid item xs={12} key={discussion.id}>
+            <Card>
+              <CardHeader
+                title={discussion.title}
+                subheader={`Created by ${discussion.createdById} at ${discussion.createdAt}`}
+              />
+              <CardContent>
+                <Typography variant="body1">{discussion.body}</Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+        ))}
+      </Grid>
+    </Container>
   );
-}
+        }

@@ -41,6 +41,17 @@ discussionRouter.get("/", async (req, res) => {
       },
     },
 
+    include: {
+      createdBy: {
+        select: {
+          firstName: true,
+          lastName: true,
+          id: true,
+          username: true,
+        },
+      },
+    },
+
     orderBy: params.orderBy
       ? {
           [params.orderBy]: params.order || "desc",
@@ -84,6 +95,14 @@ discussionRouter.get("/:id", async (req, res) => {
     },
     include: {
       comments: true,
+      createdBy: {
+        select: {
+          firstName: true,
+          lastName: true,
+          id: true,
+          username: true,
+        },
+      },
     },
   });
   res.json(post);

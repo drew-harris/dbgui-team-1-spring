@@ -9,8 +9,9 @@ import Signup from "./pages/Signup";
 import DoctorDashboard from "./pages/doctor/Dashboard";
 import DoctorDiscussion from "./pages/doctor/Discussions";
 import DoctorAppointments from "./pages/doctor/Appointments";
-import DoctorAppointment from "./pages/doctor/Appointment";
+import DoctorAppointmentsEdit from "./pages/doctor/EditAppointment";
 import DoctorSchedule from "./pages/doctor/Schedule";
+import DoctorApppointmentsAdd from "./pages/doctor/AddAppointment";
 
 import PatientDashboard from "./pages/patient/Dashboard";
 import ChooseDoctor from "./pages/patient/ChooseDoctor";
@@ -31,18 +32,6 @@ const App: React.FC = () => {
     };
 
     checkJwt();
-
-    const handleStorageChange = (e: StorageEvent) => {
-      if (e.key === "jwt") {
-        checkJwt();
-      }
-    };
-
-    window.addEventListener("storage", handleStorageChange);
-
-    return () => {
-      window.removeEventListener("storage", handleStorageChange);
-    };
   }, [updateToken]);
 
   if (loading) {
@@ -63,8 +52,12 @@ const App: React.FC = () => {
           <Route path="/doctor/appointments" element={<DoctorAppointments />} />
           <Route path="/doctor/schedule" element={<DoctorSchedule />} />
           <Route
+            path="/doctor/appointments/new"
+            element={<DoctorApppointmentsAdd />}
+          />
+          <Route
             path="/doctor/appointments/:id"
-            element={<DoctorAppointment />}
+            element={<DoctorAppointmentsEdit />}
           />
         </Route>
         <Route element={<PatientRoute isLoggedIn={isLoggedIn} type={type} />}>

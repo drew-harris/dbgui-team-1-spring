@@ -30,6 +30,8 @@ doctorRouter.get("/", async (req, res) => {
       email: true,
       username: true,
       location: true,
+      scheduleStartTime: true,
+      scheduleEndTime: true,
     },
     orderBy: params.orderBy
       ? {
@@ -84,6 +86,8 @@ doctorRouter.get("/search", async (req, res) => {
       email: true,
       username: true,
       location: true,
+      scheduleStartTime: true,
+      scheduleEndTime: true,
     },
   });
 

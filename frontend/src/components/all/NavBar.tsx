@@ -6,7 +6,7 @@ import {
   UserCircleIcon,
   HeartIcon,
 } from "@heroicons/react/24/outline";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { deleteJwt } from "../../utils/jwt";
 
 const navigation = [
@@ -23,9 +23,11 @@ function classNames(...classes) {
 
 export default function NavBar() {
   const location = useLocation();
+  const navigate = useNavigate();
 
   const handleSignOut = () => {
     deleteJwt();
+    navigate("/login");
   };
 
   return (

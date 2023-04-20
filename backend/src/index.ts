@@ -10,6 +10,8 @@ import { discussionRouter } from "./routers/discussionRouter";
 import { appointmentRouter } from "./routers/appointmentRouter";
 import { prescriptionRouter } from "./routers/prescriptionRouter";
 import { reviewRouter } from "./routers/reviewsRouter";
+import { scheduleRouter } from "./routers/scheduleRouter";
+import { patientRouter } from "./routers/patientRouter";
 // Load enviornment variables from .env file
 dotenv.config();
 
@@ -26,8 +28,10 @@ app.get("/health", (req, res) => {
 
 app.use("/user", userRouter);
 app.use("/doctors", doctorRouter);
+app.use("patients", patientRouter);
 app.use("/discussions", discussionRouter);
 app.use("/appointments", appointmentRouter);
+app.use("/schedules", scheduleRouter);
 app.use("/protected", protectedRouter);
 app.use("/reviews", reviewRouter);
 app.use("/prescriptions", prescriptionRouter);

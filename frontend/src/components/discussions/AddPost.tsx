@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Button, TextField, Container, Typography } from '@mui/material';
+import { Button, TextField, Container} from '@mui/material';
 
 interface AddDiscussionFormProps {
   onAdd: () => void;
@@ -44,9 +44,6 @@ const AddDiscussionForm: React.FC<AddDiscussionFormProps> = ({ onAdd }) => {
 
   return (
     <Container maxWidth="sm">
-      <Typography variant="h5" component="h2" gutterBottom>
-        Add Discussion
-      </Typography>
       <form onSubmit={handleSubmit}>
         <TextField
           label="Title"
@@ -75,7 +72,7 @@ const AddDiscussionForm: React.FC<AddDiscussionFormProps> = ({ onAdd }) => {
           required
         />
         <Button variant="contained" color="primary" type="submit">
-          Add Discussion
+          Post
         </Button>
       </form>
     </Container>

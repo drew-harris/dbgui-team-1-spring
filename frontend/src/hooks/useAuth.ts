@@ -42,7 +42,7 @@ export const useSignup = () => {
     },
     onSuccess: (data: any) => {
       updateToken(data.jwt);
-      navigate("/patient/dashboard");
+      navigate("/patient/doctors");
     },
   });
 

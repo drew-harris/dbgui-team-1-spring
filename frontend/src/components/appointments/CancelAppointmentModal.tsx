@@ -1,9 +1,9 @@
-/* eslint-disable no-unused-vars */
 import { Fragment, useRef, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import { AppointmentData } from "../../hooks/useAppointments";
 import { useAppointments } from "../../hooks/useAppointments";
+import { AuthContext } from "../../context/AuthContext";
 
 interface CancelAppointmentModalProps {
   open: boolean;
@@ -22,7 +22,8 @@ export default function CancelAppointmentModal({
   const dateString = appointmentDate.toLocaleDateString();
   const timeString = appointmentDate.toLocaleTimeString();
 
-  const { cancelAppointment } = useAppointments();
+  const { user } = useContext(AuthContext);
+  const { cancelAppointment } = useAppointments(user.id);
 
   const handleProceed = async () => {
     await cancelAppointment(appointment.id);

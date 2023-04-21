@@ -1,7 +1,7 @@
 import { Doctor, Patient, Appointment } from "@prisma/client";
 import { useMutation, useQueryClient, useQuery } from "react-query";
 import axios from "axios";
-import apiClient from '../utils/apiClient';
+import apiClient from "../utils/apiClient";
 
 export interface AppointmentData {
   id: string;
@@ -20,35 +20,56 @@ export interface AppointmentData {
     lastName: string;
   };
   isPlaceholder: boolean;
+  status: "Pending" | "Approved" | "Rejected" | "Empty";
 }
 
 export const useAppointments = (doctorId: string) => {
   const queryClient = useQueryClient();
 
   const getAppointments = async (): Promise<AppointmentData[]> => {
-    const { data } = await apiClient.get<AppointmentData[]>(`/appointments?doctorId=${doctorId}`);
+    const { data } = await apiClient.get<AppointmentData[]>(
+      `/appointments?doctorId=${doctorId}`
+    );
     return data;
   };
 
   const createAppointment = async (
-    appointment: Omit<AppointmentData, "id" | "createdAt" | "approved" | "doctor" | "patient">
+    appointment: Omit<
+      AppointmentData,
+      "id" | "createdAt" | "approved" | "doctor" | "patient"
+    >
   ): Promise<AppointmentData> => {
-    const { data } = await axios.post<AppointmentData>("http://localhost:8000/appointments", appointment);
+    const { data } = await apiClient.post<AppointmentData>(
+      "http://localhost:8000/appointments",
+      appointment
+    );
     return data;
   };
 
-  const cancelAppointment = async (appointmentId: string): Promise<{ success: true }> => {
-    const { data } = await apiClient.delete<{ success: true }>(`http://localhost:8000/appointments/${appointmentId}`);
+  const cancelAppointment = async (
+    appointmentId: string
+  ): Promise<{ success: true }> => {
+    const { data } = await apiClient.delete<{ success: true }>(
+      `http://localhost:8000/appointments/${appointmentId}`
+    );
     return data;
   };
 
-  const approveAppointment = async (appointmentId: string): Promise<AppointmentData> => {
-    const { data } = await axios.put<AppointmentData>(`http://localhost:8000/appointments/${appointmentId}/approve`);
+  const approveAppointment = async (
+    appointmentId: string
+  ): Promise<AppointmentData> => {
+    const { data } = await apiClient.put<AppointmentData>(
+      `http://localhost:8000/appointments/${appointmentId}/approve`
+    );
     return data;
   };
 
-  const rejectAppointment = async (appointmentId: string): Promise<AppointmentData> => {
-    const { data } = await axios.put<AppointmentData>(`http://localhost:8000/appointments/${appointmentId}/reject`);
+  const rejectAppointment = async (
+    appointmentId: string
+  ): Promise<AppointmentData> => {
+    const { data } = await apiClient.put<AppointmentData>(
+      `http://localhost:8000/appointments/${appointmentId}/reject`
+    );
     return data;
   };
 

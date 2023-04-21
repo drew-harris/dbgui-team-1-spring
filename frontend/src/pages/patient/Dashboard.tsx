@@ -25,6 +25,14 @@ export default function Dashboard() {
     navigate("/");
   }
 
+  const handlePrescription = () => {
+    navigate("/")
+  }
+
+  const handleAppointment = () => {
+    navigate("/")
+  }
+
   return (
     <div>
       <Box sx={{ flexGrow: 1 }}>
@@ -42,19 +50,25 @@ export default function Dashboard() {
           </Paper>
         </Grid>
         <Grid item xs={16}>
-          <Paper sx={{ p:2 }}>
+          <Paper sx={{ p: 2 }}>
             <Typography variant="h6">Upcoming Appointments</Typography>
-            <Box sx={{ mt: 2}}>
+            <Box sx={{ mt: 2 }}>
               <Typography variant="subtitle1">No upcoming appointments.</Typography>
             </Box>
+            <Button variant="contained" onClick={handleAppointment}>
+              Make Appointment
+            </Button>
           </Paper>
         </Grid>
         <Grid item xs={6}>
-          <Paper sx={{p: 2}}>
+          <Paper sx={{ p: 2 }}>
             <Typography variant="h6"> Prescriptions </Typography>
-            <Box sx={{ mt: 2}}>
+            <Box sx={{ mt: 2 }}>
               <Typography variant="subtitle1">No prescriptions</Typography>
             </Box>
+            <Button variant="contained" onClick={handlePrescription}>
+              Request Refill
+            </Button>
           </Paper>
         </Grid>
       </Box>

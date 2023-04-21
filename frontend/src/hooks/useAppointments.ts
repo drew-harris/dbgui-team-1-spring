@@ -40,7 +40,7 @@ export const useAppointments = (doctorId: string) => {
     >
   ): Promise<AppointmentData> => {
     const { data } = await apiClient.post<AppointmentData>(
-      "http://localhost:8000/appointments",
+      "http://localhost:8000/appointments/doctor",
       appointment
     );
     return data;

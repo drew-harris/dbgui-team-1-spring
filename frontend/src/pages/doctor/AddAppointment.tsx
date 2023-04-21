@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import NavBar from "../../components/all/NavBar";
 import { useState } from "react";
 import { useForm } from "react-hook-form";

@@ -3,6 +3,7 @@ import Button from "@mui/material/Button";
 import React, { useContext, useEffect} from "react";
 import { AuthContext } from "../../context/AuthContext";
 import { useNavigate } from 'react-router-dom';
+import NavBar from "../../components/all/NavBar";
 
 
 
@@ -18,12 +19,7 @@ export default function Dashboard() {
 
   return (
     <div>
-
-      <h1>Doctor Dashboard</h1>
-      <Button>Test MUI Button</Button>
-      <Button onClick={() => navigate("/doctor/discussions")}>
-        Discussions
-      </Button>
+      <NavBar></NavBar>
     </div>
   );
 }

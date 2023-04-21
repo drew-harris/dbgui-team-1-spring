@@ -17,6 +17,7 @@ import PatientDashboard from "./pages/patient/Dashboard";
 import ChooseDoctor from "./pages/patient/ChooseDoctor";
 
 import { AuthContext } from "./context/AuthContext";
+import DoctorPrescriptions from "./pages/doctor/Prescriptions";
 
 const App: React.FC = () => {
   const [loading, setLoading] = useState(true);
@@ -51,6 +52,7 @@ const App: React.FC = () => {
           <Route path="/doctor/discussions" element={<DoctorDiscussion />} />
           <Route path="/doctor/appointments" element={<DoctorAppointments />} />
           <Route path="/doctor/schedule" element={<DoctorSchedule />} />
+          <Route path="/doctor/prescriptions" element={<DoctorPrescriptions/>} />
           <Route
             path="/doctor/appointments/new"
             element={<DoctorApppointmentsAdd />}

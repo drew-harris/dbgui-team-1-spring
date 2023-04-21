@@ -1,6 +1,6 @@
-// src/App.tsx
-import React, { useContext } from "react";
-import AddAppointmentForm from "../../components/appointments/AddAppointmentForm";
+import NavBar from "../../components/all/NavBar";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { useAppointments } from "../../hooks/useAppointments";
 import NavBar from "../../components/all/NavBar";
 import { AuthContext } from "../../context/AuthContext";

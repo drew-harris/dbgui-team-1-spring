@@ -16,7 +16,7 @@ prescriptionRouter.get("/", patientOnlyMiddleware, async (req, res) => {
   res.json(prescriptions);
 });
 
-prescriptionRouter.get("/doctor", patientOnlyMiddleware, async (req, res) => {
+prescriptionRouter.get("/doctor", doctorOnlyMiddleware, async (req, res) => {
   const prescriptions = await prisma.prescription.findMany({
     where: { doctorId: req.user.id },
   });

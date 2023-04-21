@@ -28,7 +28,7 @@ app.get("/health", (req, res) => {
 
 app.use("/user", userRouter);
 app.use("/doctors", doctorRouter);
-app.use("/patients", patientRouter);
+app.use("patients", patientRouter);
 app.use("/discussions", discussionRouter);
 app.use("/appointments", appointmentRouter);
 app.use("/schedules", scheduleRouter);

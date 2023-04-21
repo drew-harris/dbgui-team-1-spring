@@ -15,6 +15,7 @@ interface PlaceholderAppointment {
   reason: string;
   approved: boolean;
   isPlaceholder: true;
+  status: "Empty";
 }
 
 type CombinedAppointment = AppointmentData | PlaceholderAppointment;
@@ -32,7 +33,9 @@ function Schedule() {
     rejectAppointment,
   } = useAppointments(user.id);
 
-  const [selectedDay, setSelectedDay] = useState(moment().startOf("day"));
+  const [selectedDay, setSelectedDay] = useState(
+    moment("2023-03-25").startOf("day")
+  );
 
   const handleDayChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedDay(moment(event.target.value).startOf("day"));
@@ -171,6 +174,7 @@ function Schedule() {
                                 patientId: "Your patient ID here", // You need to provide a patient ID
                                 doctorId: "Your doctor ID here", // You need to provide a doctor ID
                                 isPlaceholder: false,
+                                status: "Pending",
                               })
                             }
                             className="rounded bg-indigo-500 px-4 py-2 font-bold text-white hover:bg-indigo-700"

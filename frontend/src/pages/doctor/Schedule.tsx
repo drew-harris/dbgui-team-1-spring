@@ -15,6 +15,7 @@ interface PlaceholderAppointment {
   reason: string;
   approved: boolean;
   isPlaceholder: true;
+  status: "Empty";
 }
 
 type CombinedAppointment = AppointmentData | PlaceholderAppointment;
@@ -25,14 +26,16 @@ function Schedule() {
     appointments,
     isLoading,
     error,
-    refetch,
+    //refetch,
     createAppointment,
     cancelAppointment,
     approveAppointment,
     rejectAppointment,
   } = useAppointments(user.id);
 
-  const [selectedDay, setSelectedDay] = useState(moment().startOf("day"));
+  const [selectedDay, setSelectedDay] = useState(
+    moment("2023-03-25").startOf("day")
+  );
 
   const handleDayChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedDay(moment(event.target.value).startOf("day"));
@@ -82,6 +85,10 @@ function Schedule() {
     }
   );
 
+  const handleScheduleClick = (time: Date) => {
+    navigate(`/doctor/appointments/new?dateTime=${time.toISOString()}`);
+  };
+
   if (isLoading) return <p>Loading...</p>;
   if (error) return <p>Error loading appointments</p>;
 
@@ -92,7 +99,7 @@ function Schedule() {
         <div className="mb-6 flex items-center justify-between">
           <h1 className="text-3xl font-semibold">Schedule</h1>
           <button
-            onClick={() => navigate("/doctor/appointments/new")}
+            onClick={() => navigate("/doctor/schedule/change")}
             className="rounded-md bg-indigo-500 px-6 py-2 font-bold text-white hover:bg-indigo-700"
           >
             Change Schedule
@@ -165,13 +172,7 @@ function Schedule() {
                         {appointment.isPlaceholder ? (
                           <button
                             onClick={() =>
-                              createAppointment({
-                                time: moment(appointment.time).toDate(),
-                                reason: "Your reason here", // You need to provide a reason or get it from the user input
-                                patientId: "Your patient ID here", // You need to provide a patient ID
-                                doctorId: "Your doctor ID here", // You need to provide a doctor ID
-                                isPlaceholder: false,
-                              })
+                              handleScheduleClick(appointment.time)
                             }
                             className="rounded bg-indigo-500 px-4 py-2 font-bold text-white hover:bg-indigo-700"
                           >

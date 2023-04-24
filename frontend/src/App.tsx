@@ -12,11 +12,13 @@ import DoctorAppointments from "./pages/doctor/Appointments";
 import DoctorAppointmentsEdit from "./pages/doctor/EditAppointment";
 import DoctorSchedule from "./pages/doctor/Schedule";
 import DoctorApppointmentsAdd from "./pages/doctor/AddAppointment";
+import DoctorScheduleChange from "./pages/doctor/ChangeSchedule";
 
 import PatientDashboard from "./pages/patient/Dashboard";
 import ChooseDoctor from "./pages/patient/ChooseDoctor";
 
 import { AuthContext } from "./context/AuthContext";
+import DoctorPrescriptions from "./pages/doctor/Prescriptions";
 
 const App: React.FC = () => {
   const [loading, setLoading] = useState(true);
@@ -51,6 +53,7 @@ const App: React.FC = () => {
           <Route path="/doctor/discussions" element={<DoctorDiscussion />} />
           <Route path="/doctor/appointments" element={<DoctorAppointments />} />
           <Route path="/doctor/schedule" element={<DoctorSchedule />} />
+          <Route path="/doctor/prescriptions" element={<DoctorPrescriptions/>} />
           <Route
             path="/doctor/appointments/new"
             element={<DoctorApppointmentsAdd />}
@@ -58,6 +61,10 @@ const App: React.FC = () => {
           <Route
             path="/doctor/appointments/:id"
             element={<DoctorAppointmentsEdit />}
+          />
+          <Route
+            path="/doctor/schedule/change"
+            element={<DoctorScheduleChange />}
           />
         </Route>
         <Route element={<PatientRoute isLoggedIn={isLoggedIn} type={type} />}>

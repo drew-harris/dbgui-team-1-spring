@@ -42,7 +42,7 @@ export const useSignup = () => {
     },
     onSuccess: (data: any) => {
       updateToken(data.jwt);
-      navigate("/patient/dashboard");
+      navigate("/patient/doctors");
     },
   });
 
@@ -54,6 +54,11 @@ const signinDoctor = async (data: { email: string; password: string }) => {
     "http://localhost:8000/user/doctor/signin",
     data
   );
+  
+  if (response.status !== 200) {
+    throw new Error(response.data.error.message || "Something went wrong");
+  }
+
   return response.data;
 };
 

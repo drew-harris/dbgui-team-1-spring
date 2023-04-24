@@ -1,6 +1,7 @@
 // src/components/AddAppointmentForm.tsx
 import React, { useState, useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
+import moment from "moment";
 
 interface AddAppointmentFormProps {
   onSubmit: (appointmentData: {
@@ -9,15 +10,19 @@ interface AddAppointmentFormProps {
     patientId: string;
     doctorId: string;
   }) => void;
+  initialDateTime?: Date;
 }
 
 const AddAppointmentForm: React.FC<AddAppointmentFormProps> = ({
   onSubmit,
+  initialDateTime,
 }) => {
   const { user } = useContext(AuthContext);
   const doctorId = user?.id;
 
-  const [time, setTime] = useState("");
+  const [time, setTime] = useState(
+    initialDateTime ? initialDateTime.toISOString().slice(0, 16) : ""
+  );
   const [reason, setReason] = useState("");
   const [patientId, setPatientId] = useState("");
 
@@ -29,10 +34,8 @@ const AddAppointmentForm: React.FC<AddAppointmentFormProps> = ({
   };
 
   const handleChangeTime = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const date = new Date(e.target.value);
-    const timezoneOffset = date.getTimezoneOffset() * 60 * 1000;
-    const localDate = new Date(date.getTime() - timezoneOffset);
-    const roundedDate = roundToHour(localDate);
+    const date = moment(e.target.value).toDate();
+    const roundedDate = roundToHour(date);
     setTime(roundedDate.toISOString().slice(0, 16));
   };
 

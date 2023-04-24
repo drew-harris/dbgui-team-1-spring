@@ -3,15 +3,16 @@ import ScheduleForm from "../../components/schedule/ScheduleForm";
 import NavBar from "../../components/all/NavBar";
 
 const DoctorSchedulePage: React.FC = () => {
-  // Replace "doctorId" with the actual doctor's ID
-  const doctorId = "doctorId";
-
   return (
     <>
       <NavBar />
-      <div className="container mx-auto">
+      <div className="container mx-auto p-8">
         <h1 className="mb-6 text-2xl font-semibold">Update Schedule</h1>
-        <ScheduleForm doctorId={doctorId} />
+        <p className="mb-6">
+          Update your schedule so patients can book appointments with you, will
+          be rounded down to hour.
+        </p>
+        <ScheduleForm />
       </div>
     </>
   );

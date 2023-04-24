@@ -1,4 +1,4 @@
-import { Fragment, useRef, useState } from "react";
+import { Fragment, useRef, useContext } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import { AppointmentData } from "../../hooks/useAppointments";
@@ -6,13 +6,12 @@ import { useAppointments } from "../../hooks/useAppointments";
 import { AuthContext } from "../../context/AuthContext";
 
 interface CancelAppointmentModalProps {
-  open: boolean;
+  // eslint-disable-next-line no-unused-vars
   setOpen: (open: boolean) => void;
   appointment: AppointmentData;
 }
 
 export default function CancelAppointmentModal({
-  open,
   setOpen,
   appointment,
 }: CancelAppointmentModalProps) {

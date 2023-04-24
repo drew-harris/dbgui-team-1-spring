@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDoctorSchedule } from "../../hooks/useDoctorSchedule";
 import { AuthContext } from "../../context/AuthContext";
 import { useContext } from "react";
@@ -9,12 +9,28 @@ const ScheduleForm: React.FC = () => {
     user.id
   );
 
-  const [start, setStart] = useState(schedule?.start || 0);
-  const [end, setEnd] = useState(schedule?.end || 0);
+  const [start, setStart] = useState("00:00");
+  const [end, setEnd] = useState("00:00");
+
+  useEffect(() => {
+    if (schedule) {
+      setStart(
+        schedule.start
+          ? `${String(schedule.start).padStart(2, "0")}:00`
+          : "00:00"
+      );
+      setEnd(
+        schedule.end ? `${String(schedule.end).padStart(2, "0")}:00` : "00:00"
+      );
+    }
+  }, [schedule]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    updateSchedule({ start, end });
+    updateSchedule({
+      start: parseInt(start.split(":")[0]),
+      end: parseInt(end.split(":")[0]),
+    });
   };
 
   if (isLoading) return <div>Loading...</div>;
@@ -28,11 +44,10 @@ const ScheduleForm: React.FC = () => {
         </label>
         <input
           id="start"
-          type="number"
+          type="time"
           value={start}
-          onChange={(e) => setStart(parseInt(e.target.value))}
-          min="0"
-          max="23"
+          onChange={(e) => setStart(e.target.value)}
+          step="3600"
           className="block w-full rounded border border-gray-300 p-2 focus:border-indigo-300 focus:outline-none focus:ring"
         />
       </div>
@@ -43,20 +58,19 @@ const ScheduleForm: React.FC = () => {
         </label>
         <input
           id="end"
-          type="number"
+          type="time"
           value={end}
-          onChange={(e) => setEnd(parseInt(e.target.value))}
-          min="0"
-          max="23"
+          onChange={(e) => setEnd(e.target.value)}
+          step="3600"
           className="block w-full rounded border border-gray-300 p-2 focus:border-indigo-300 focus:outline-none focus:ring"
         />
       </div>
-
       <button
         type="submit"
         className="w-full rounded bg-indigo-500 py-2 text-white"
       >
-        Update Schedule
+        {" "}
+        Update Schedule{" "}
       </button>
     </form>
   );

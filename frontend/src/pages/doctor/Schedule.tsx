@@ -1,5 +1,6 @@
 import React, { useState, useContext } from "react";
 import { useAppointments, AppointmentData } from "../../hooks/useAppointments";
+import { useDoctorSchedule } from "../../hooks/useDoctorSchedule"; // Import the hook
 import NavBar from "../../components/all/NavBar";
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
@@ -27,11 +28,13 @@ function Schedule() {
     isLoading,
     error,
     //refetch,
-    createAppointment,
     cancelAppointment,
     approveAppointment,
     rejectAppointment,
   } = useAppointments(user.id);
+
+  // Fetch the doctor's schedule
+  const { schedule: doctorSchedule } = useDoctorSchedule(user.id);
 
   const [selectedDay, setSelectedDay] = useState(
     moment("2023-03-25").startOf("day")
@@ -50,11 +53,15 @@ function Schedule() {
     return slots;
   };
 
+  // Use doctorSchedule.start and doctorSchedule.end if available, otherwise, use default values
+  const timeSlots = generateTimeSlots(
+    doctorSchedule?.start || 9,
+    doctorSchedule?.end || 17
+  );
+
   const filteredAppointments = appointments?.filter((appointment) =>
     moment(appointment.time).isSame(selectedDay, "day")
   );
-
-  const timeSlots = generateTimeSlots(9, 17);
 
   const combinedAppointments: CombinedAppointment[][] = timeSlots.map(
     (slot) => {

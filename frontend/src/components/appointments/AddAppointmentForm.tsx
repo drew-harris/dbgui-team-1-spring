@@ -4,6 +4,7 @@ import { AuthContext } from "../../context/AuthContext";
 import moment from "moment";
 
 interface AddAppointmentFormProps {
+  // eslint-disable-next-line no-unused-vars
   onSubmit: (appointmentData: {
     time: Date;
     reason: string;

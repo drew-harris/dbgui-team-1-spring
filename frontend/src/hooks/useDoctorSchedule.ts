@@ -6,7 +6,7 @@ export const useDoctorSchedule = (doctorId: string) => {
 
   const getSchedule = async (): Promise<{ start: number; end: number }> => {
     const { data } = await apiClient.get<{ start: number; end: number }>(
-      `/schedule?id=${doctorId}`
+      `/schedules?id=${doctorId}`
     );
     return data;
   };
@@ -16,7 +16,7 @@ export const useDoctorSchedule = (doctorId: string) => {
     end: number;
   }): Promise<{ start: number; end: number }> => {
     const { data } = await apiClient.post<{ start: number; end: number }>(
-      "/schedule",
+      "/schedules",
       scheduleData
     );
     return data;

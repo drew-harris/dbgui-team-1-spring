@@ -75,6 +75,17 @@ export const useAppointments = (doctorId: string) => {
     return data;
   };
 
+  const updateAppointment = async (
+    appointmentId: string,
+    appointmentData: Partial<AppointmentData>
+  ): Promise<AppointmentData> => {
+    const { data } = await apiClient.put<AppointmentData>(
+      `http://localhost:8000/appointments/${appointmentId}`,
+      appointmentData
+    );
+    return data;
+  };
+
   const {
     data: appointments,
     isLoading,

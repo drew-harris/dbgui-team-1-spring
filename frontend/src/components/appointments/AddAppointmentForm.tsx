@@ -1,7 +1,7 @@
 // src/components/AddAppointmentForm.tsx
 import React, { useState, useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
-import moment from "moment";
+import { usePatients } from "../../hooks/usePatients";
 
 interface AddAppointmentFormProps {
   // eslint-disable-next-line no-unused-vars
@@ -20,10 +20,19 @@ const AddAppointmentForm: React.FC<AddAppointmentFormProps> = ({
 }) => {
   const { user } = useContext(AuthContext);
   const doctorId = user?.id;
+  const { patients } = usePatients();
 
   const [time, setTime] = useState(
-    initialDateTime ? initialDateTime.toISOString().slice(0, 16) : ""
+    initialDateTime
+      ? new Date(
+          initialDateTime.getTime() -
+            initialDateTime.getTimezoneOffset() * 60000
+        )
+          .toISOString()
+          .slice(0, 16)
+      : ""
   );
+
   const [reason, setReason] = useState("");
   const [patientId, setPatientId] = useState("");
 
@@ -35,8 +44,11 @@ const AddAppointmentForm: React.FC<AddAppointmentFormProps> = ({
   };
 
   const handleChangeTime = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const date = moment(e.target.value).toDate();
-    const roundedDate = roundToHour(date);
+    const localDate = new Date(e.target.value);
+    const utcDate = new Date(
+      localDate.getTime() - localDate.getTimezoneOffset() * 60000
+    );
+    const roundedDate = roundToHour(utcDate);
     setTime(roundedDate.toISOString().slice(0, 16));
   };
 
@@ -91,15 +103,21 @@ const AddAppointmentForm: React.FC<AddAppointmentFormProps> = ({
 
       <div>
         <label htmlFor="patientId" className="block text-sm font-medium">
-          Patient ID
+          Patient
         </label>
-        <input
+        <select
           id="patientId"
-          type="text"
           value={patientId}
           onChange={(e) => setPatientId(e.target.value)}
           className="block w-full rounded border border-gray-300 p-2 focus:border-indigo-300 focus:outline-none focus:ring"
-        />
+        >
+          <option value="">Select a patient</option>
+          {patients?.map((patient) => (
+            <option key={patient.id} value={patient.id}>
+              {patient.firstName} {patient.lastName}
+            </option>
+          ))}
+        </select>
       </div>
       <button
         type="submit"

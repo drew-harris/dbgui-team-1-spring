@@ -5,13 +5,16 @@ import { AppointmentData } from "../../hooks/useAppointments";
 import { useAppointments } from "../../hooks/useAppointments";
 import { AuthContext } from "../../context/AuthContext";
 
+/* eslint-disable no-unused-vars */
 interface CancelAppointmentModalProps {
   // eslint-disable-next-line no-unused-vars
+  open: boolean;
   setOpen: (open: boolean) => void;
   appointment: AppointmentData;
 }
 
 export default function CancelAppointmentModal({
+  open,
   setOpen,
   appointment,
 }: CancelAppointmentModalProps) {

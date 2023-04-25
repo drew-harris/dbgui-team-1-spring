@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient, useQuery } from "react-query";
 import apiClient from "../utils/apiClient";
+import { ToastSuccess, ToastError } from "../components/toast/toast";
 
 export const useDoctorSchedule = (doctorId: string) => {
   const queryClient = useQueryClient();
@@ -32,6 +33,10 @@ export const useDoctorSchedule = (doctorId: string) => {
   const mutationOptions = {
     onSuccess: () => {
       queryClient.invalidateQueries("schedule");
+      ToastSuccess("Update Schedule successful");
+    },
+    onError: (error: Error) => {
+      ToastError(`Update Schedule failed: ${error.message}`);
     },
   };
 

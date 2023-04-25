@@ -1,6 +1,6 @@
 import React from "react";
 import ScheduleForm from "../../components/schedule/ScheduleForm";
-import NavBar from "../../components/all/NavBar";
+import NavBar from "../../components/nav/DoctorNavBar";
 
 const DoctorSchedulePage: React.FC = () => {
   return (

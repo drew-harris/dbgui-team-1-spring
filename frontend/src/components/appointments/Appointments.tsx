@@ -3,6 +3,7 @@ import { useAppointments } from "../../hooks/useAppointments";
 import { AppointmentTable } from "./AppointmentTable";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
+import { CircularProgress } from "@mui/material";
 
 export const Appointments: React.FC = () => {
   const navigate = useNavigate();
@@ -10,7 +11,11 @@ export const Appointments: React.FC = () => {
   const { appointments, isLoading, error, refetch } = useAppointments(user.id);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <CircularProgress color="secondary" />
+      </div>
+    );
   }
 
   if (error) {

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useDoctorSchedule } from "../../hooks/useDoctorSchedule";
 import { AuthContext } from "../../context/AuthContext";
 import { useContext } from "react";
+import { CircularProgress } from "@mui/material";
 
 const ScheduleForm: React.FC = () => {
   const { user } = useContext(AuthContext);
@@ -33,7 +34,13 @@ const ScheduleForm: React.FC = () => {
     });
   };
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <CircularProgress color="secondary" />
+      </div>
+    );
+  }
   if (error) return <div>Error: {error}</div>;
 
   return (

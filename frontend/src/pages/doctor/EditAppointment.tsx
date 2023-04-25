@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
-import NavBar from "../../components/all/NavBar";
+import NavBar from "../../components/nav/DoctorNavBar";
 import { useParams } from "react-router-dom";
 import EditAppointmentForm from "../../components/appointments/EditAppointmentForm";
 import { useAppointments } from "../../hooks/useAppointments";
-// Import other necessary hooks if needed
 
 const EditAppointmentPage: React.FC = () => {
   const { id: appointmentId } = useParams<{ id: string }>();
@@ -13,7 +12,7 @@ const EditAppointmentPage: React.FC = () => {
     appointments,
     refetch,
     updateAppointment: updateAppointmentMutation,
-  } = useAppointments(""); // Pass doctorId if required
+  } = useAppointments("");
 
   useEffect(() => {
     const fetchAppointmentData = async () => {
@@ -29,7 +28,6 @@ const EditAppointmentPage: React.FC = () => {
 
   const handleFormSubmit = async (updatedAppointmentData) => {
     await updateAppointmentMutation(appointmentId, updatedAppointmentData);
-    // Redirect to the desired page or display a success message
   };
 
   return (

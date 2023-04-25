@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import DoctorRoute from "./router/DoctorRoute";
 import PatientRoute from "./router/PatientRoute";
+import { CircularProgress } from "@mui/material";
 
 import Signin from "./pages/Signin";
 import Signup from "./pages/Signup";
@@ -39,7 +40,11 @@ const App: React.FC = () => {
   }, [updateToken]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <CircularProgress color="secondary" />
+      </div>
+    );
   }
 
   const isLoggedIn = user !== null;

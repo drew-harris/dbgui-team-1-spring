@@ -1,10 +1,8 @@
-// Missing imports added
 import React, { useContext } from "react";
-import NavBar from "../../components/all/NavBar";
+import NavBar from "../../components/nav/DoctorNavBar";
 import { useAppointments } from "../../hooks/useAppointments";
 import { AuthContext } from "../../context/AuthContext";
 import { useSearchParams } from "react-router-dom";
-// Import the AddAppointmentForm component
 import AddAppointmentForm from "../../components/appointments/AddAppointmentForm";
 
 const App: React.FC = () => {

@@ -1,6 +1,6 @@
 import React from "react";
 import { Appointments } from "../../components/appointments/Appointments";
-import NavBar from "../../components/all/NavBar";
+import NavBar from "../../components/nav/DoctorNavBar";
 
 function Appointment() {
   return (

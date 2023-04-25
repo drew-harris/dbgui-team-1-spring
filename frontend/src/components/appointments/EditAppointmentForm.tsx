@@ -29,7 +29,16 @@ const EditAppointmentForm: React.FC<EditAppointmentFormProps> = ({
   const { patients } = usePatients();
   const patient = patients?.find((p) => p.id === initialData.patientId);
 
-  const [time, setTime] = useState(initialData.time.toISOString().slice(0, 16));
+  const [time, setTime] = useState(
+    initialData.time
+      ? new Date(
+          initialData.time.getTime() -
+            initialData.time.getTimezoneOffset() * 60000
+        )
+          .toISOString()
+          .slice(0, 16)
+      : ""
+  );
 
   const [reason, setReason] = useState(initialData.reason);
   const [approved, setApproved] = useState(initialData.approved);
@@ -82,17 +91,38 @@ const EditAppointmentForm: React.FC<EditAppointmentFormProps> = ({
         />
       </div>
 
-      <div>
-        <label htmlFor="approved" className="block text-sm font-medium">
+      <div className="flex items-center">
+        <label htmlFor="approved" className="mr-3 block text-sm font-medium">
           Approved
         </label>
-        <input
-          id="approved"
-          type="checkbox"
-          checked={approved}
-          onChange={(e) => setApproved(e.target.checked)}
-          className="ml-4 block rounded border border-gray-300 focus:border-indigo-300 focus:outline-none focus:ring"
-        />
+        <div className="relative">
+          <input
+            id="approved"
+            type="checkbox"
+            checked={approved}
+            onChange={(e) => setApproved(e.target.checked)}
+            className="hidden"
+          />
+          <label
+            htmlFor="approved"
+            className={`inline-block h-6 w-6 cursor-pointer rounded-sm border-2 border-gray-300 ${
+              approved ? "bg-indigo-600" : "bg-white"
+            }`}
+          >
+            <svg
+              className={`h-5 w-5 text-white ${approved ? "block" : "hidden"}`}
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fillRule="evenodd"
+                d="M4 4a1 1 0 011.707-.707L9 6.586l4.647-4.648A1 1 0 0115.414 4l-5 5a1 1 0 01-1.414 0l-5-5z"
+                clipRule="evenodd"
+              />
+            </svg>
+          </label>
+        </div>
       </div>
 
       <div>

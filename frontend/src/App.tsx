@@ -13,6 +13,7 @@ import DoctorAppointmentsEdit from "./pages/doctor/EditAppointment";
 import DoctorSchedule from "./pages/doctor/Schedule";
 import DoctorApppointmentsAdd from "./pages/doctor/AddAppointment";
 import DoctorScheduleChange from "./pages/doctor/ChangeSchedule";
+import DoctorProfile from "./pages/doctor/Profile";
 
 import PatientDashboard from "./pages/patient/Dashboard";
 import ChooseDoctor from "./pages/patient/ChooseDoctor";
@@ -70,6 +71,7 @@ const App: React.FC = () => {
             path="/doctor/schedule/change"
             element={<DoctorScheduleChange />}
           />
+          <Route path="/doctor/profile" element={<DoctorProfile />} />
         </Route>
         <Route element={<PatientRoute isLoggedIn={isLoggedIn} type={type} />}>
           <Route path="/patient/doctors" element={<ChooseDoctor />} />

@@ -105,7 +105,7 @@ export default function NavBar() {
                       <Menu.Item>
                         {({ active }) => (
                           <Link
-                            to="/profile"
+                            to="/doctor/profile"
                             className={classNames(
                               active ? "bg-gray-100" : "",
                               "block w-full px-4 py-2 text-left text-sm text-gray-700"

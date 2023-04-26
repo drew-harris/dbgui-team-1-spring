@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import DoctorRoute from "./router/DoctorRoute";
 import PatientRoute from "./router/PatientRoute";
+import { CircularProgress } from "@mui/material";
 
 import Signin from "./pages/Signin";
 import Signup from "./pages/Signup";
@@ -12,9 +13,14 @@ import DoctorAppointments from "./pages/doctor/Appointments";
 import DoctorAppointmentsEdit from "./pages/doctor/EditAppointment";
 import DoctorSchedule from "./pages/doctor/Schedule";
 import DoctorApppointmentsAdd from "./pages/doctor/AddAppointment";
+import DoctorScheduleChange from "./pages/doctor/ChangeSchedule";
+import DoctorProfile from "./pages/doctor/Profile";
 
 import PatientDashboard from "./pages/patient/Dashboard";
 import ChooseDoctor from "./pages/patient/ChooseDoctor";
+import PatientAppointments from "./pages/patient/Appointments";
+import PatientProfile from "./pages/patient/Profile";
+import PatientSchedule from "./pages/patient/Schedule";
 
 import { AuthContext } from "./context/AuthContext";
 import DoctorPrescriptions from "./pages/doctor/Prescriptions";
@@ -36,7 +42,11 @@ const App: React.FC = () => {
   }, [updateToken]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <CircularProgress color="secondary" />
+      </div>
+    );
   }
 
   const isLoggedIn = user !== null;
@@ -52,7 +62,10 @@ const App: React.FC = () => {
           <Route path="/doctor/discussions" element={<DoctorDiscussion />} />
           <Route path="/doctor/appointments" element={<DoctorAppointments />} />
           <Route path="/doctor/schedule" element={<DoctorSchedule />} />
-          <Route path="/doctor/prescriptions" element={<DoctorPrescriptions/>} />
+          <Route
+            path="/doctor/prescriptions"
+            element={<DoctorPrescriptions />}
+          />
           <Route
             path="/doctor/appointments/new"
             element={<DoctorApppointmentsAdd />}
@@ -61,10 +74,21 @@ const App: React.FC = () => {
             path="/doctor/appointments/:id"
             element={<DoctorAppointmentsEdit />}
           />
+          <Route
+            path="/doctor/schedule/change"
+            element={<DoctorScheduleChange />}
+          />
+          <Route path="/doctor/profile" element={<DoctorProfile />} />
         </Route>
         <Route element={<PatientRoute isLoggedIn={isLoggedIn} type={type} />}>
           <Route path="/patient/doctors" element={<ChooseDoctor />} />
           <Route path="/patient/dashboard" element={<PatientDashboard />} />
+          <Route
+            path="/patient/appointments"
+            element={<PatientAppointments />}
+          />
+          <Route path="/patient/schedule" element={<PatientSchedule />} />
+          <Route path="/patient/profile" element={<PatientProfile />} />
         </Route>
         <Route path="*" element={<div>404 page not found</div>} />
       </Routes>

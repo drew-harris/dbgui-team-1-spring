@@ -45,6 +45,27 @@ appointmentRouter.get("/", authMiddleware, async (req, res) => {
   res.json(appointments);
 });
 
+// Update an appointment
+appointmentRouter.put("/:id", authMiddleware, async (req, res) => {
+  const body = req.body;
+  if (!body) {
+    throw new APIError("Missing body", 400);
+  }
+
+  const appointment = await prisma.appointment.update({
+    where: {
+      id: req.params.id,
+    },
+    data: {
+      approved: body.approved,
+      reason: body.reason,
+      time: body.time ? new Date(body.time) : undefined,
+    },
+  });
+
+  return res.json(appointment);
+});
+
 appointmentRouter.post("/", patientOnlyMiddleware, async (req, res) => {
   const body = req.body;
   if (!body) {
@@ -68,6 +89,62 @@ appointmentRouter.post("/", patientOnlyMiddleware, async (req, res) => {
       doctorId: body.doctorId,
       reason: body.reason,
       time,
+    },
+    include: {
+      doctor: {
+        select: {
+          firstName: true,
+          lastName: true,
+          username: true,
+          id: true,
+        },
+      },
+      patient: {
+        select: {
+          firstName: true,
+          lastName: true,
+          username: true,
+          id: true,
+        },
+      },
+    },
+  });
+
+  return res.json(appointment);
+});
+
+appointmentRouter.post("/doctor", doctorOnlyMiddleware, async (req, res) => {
+  const body = req.body;
+  if (!body) {
+    throw new APIError("Missing body", 400);
+  }
+
+  if (!body.reason) {
+    throw new APIError("Missing reason", 400);
+  }
+
+  let time: Date;
+  try {
+    time = new Date(body.time);
+  } catch (error) {
+    throw new APIError("Invalid time", 400);
+  }
+
+  const appointment = await prisma.appointment.create({
+    data: {
+      patient: {
+        connect: {
+          id: body.patientId,
+        },
+      },
+      reason: body.reason,
+      time,
+      doctor: {
+        connect: {
+          id: req.user.id,
+        },
+      },
+      approved: true,
     },
     include: {
       doctor: {

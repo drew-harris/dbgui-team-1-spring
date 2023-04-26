@@ -1,9 +1,12 @@
 import React, { useState, useContext } from "react";
 import { useAppointments, AppointmentData } from "../../hooks/useAppointments";
-import NavBar from "../../components/all/NavBar";
+import { useDoctorSchedule } from "../../hooks/useDoctorSchedule";
+import NavBar from "../../components/nav/DoctorNavBar";
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
+import { CircularProgress } from "@mui/material";
+import { ScheduleTable } from "../../components/schedule/ScheduleTable"; // Import the ScheduleTable component
 
 interface PlaceholderAppointment {
   id: number;
@@ -27,11 +30,13 @@ function Schedule() {
     isLoading,
     error,
     //refetch,
-    createAppointment,
     cancelAppointment,
     approveAppointment,
     rejectAppointment,
   } = useAppointments(user.id);
+
+  // Fetch the doctor's schedule
+  const { schedule: doctorSchedule } = useDoctorSchedule(user.id);
 
   const [selectedDay, setSelectedDay] = useState(
     moment("2023-03-25").startOf("day")
@@ -50,11 +55,15 @@ function Schedule() {
     return slots;
   };
 
+  // Use doctorSchedule.start and doctorSchedule.end if available, otherwise, use default values
+  const timeSlots = generateTimeSlots(
+    doctorSchedule?.start || 9,
+    doctorSchedule?.end || 17
+  );
+
   const filteredAppointments = appointments?.filter((appointment) =>
     moment(appointment.time).isSame(selectedDay, "day")
   );
-
-  const timeSlots = generateTimeSlots(9, 17);
 
   const combinedAppointments: CombinedAppointment[][] = timeSlots.map(
     (slot) => {
@@ -85,7 +94,20 @@ function Schedule() {
     }
   );
 
-  if (isLoading) return <p>Loading...</p>;
+  const handleScheduleClick = (time: Date) => {
+    navigate(`/doctor/appointments/new?dateTime=${time.toISOString()}`);
+  };
+
+  if (isLoading) {
+    return (
+      <>
+        <NavBar />
+        <div className="container mx-auto flex min-h-screen items-center justify-center px-4 py-8">
+          <CircularProgress color="secondary" />
+        </div>
+      </>
+    );
+  }
   if (error) return <p>Error loading appointments</p>;
 
   return (
@@ -95,7 +117,7 @@ function Schedule() {
         <div className="mb-6 flex items-center justify-between">
           <h1 className="text-3xl font-semibold">Schedule</h1>
           <button
-            onClick={() => navigate("/doctor/appointments/new")}
+            onClick={() => navigate("/doctor/schedule/change")}
             className="rounded-md bg-indigo-500 px-6 py-2 font-bold text-white hover:bg-indigo-700"
           >
             Change Schedule
@@ -109,114 +131,14 @@ function Schedule() {
             className="rounded border border-gray-300 px-2 py-1"
           />
         </div>
-        <div className="overflow-x-auto">
-          <table className="mx-0 min-w-full divide-y divide-gray-200 border border-blue-300">
-            <thead className="bg-indigo-500">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-white">
-                  Time
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-white">
-                  Patient
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-white">
-                  Reason
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-white">
-                  Status
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-white">
-                  Actions
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-200 bg-white">
-              {combinedAppointments.map((appointments, index) => (
-                <>
-                  {appointments.map((appointment, subIndex) => (
-                    <tr
-                      key={appointment.id}
-                      className={
-                        index % 2 === 0 && subIndex === 0 ? "bg-blue-50" : ""
-                      }
-                    >
-                      <td className="whitespace-nowrap px-6 py-4 text-sm font-medium">
-                        {subIndex === 0 &&
-                          moment(appointment.time).format("hh:mm A")}
-                      </td>
-                      <td className="whitespace-nowrap px-6 py-4 text-sm font-medium">
-                        {appointment.patient.firstName}{" "}
-                        {appointment.patient.lastName}
-                      </td>
-                      <td className="whitespace-nowrap px-6 py-4 text-sm font-medium">
-                        {appointment.reason}
-                      </td>
-                      <td className="whitespace-nowrap px-6 py-4 text-sm font-medium">
-                        <span
-                          className={`inline-block rounded-full px-3 py-1 text-xs font-semibold ${
-                            appointment.status === "Approved"
-                              ? "bg-green-200 text-green-800"
-                              : appointment.status === "Empty"
-                              ? "bg-gray-200 text-gray-800"
-                              : "bg-yellow-200 text-yellow-800"
-                          }`}
-                        >
-                          {appointment.status}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 text-sm font-medium">
-                        {appointment.isPlaceholder ? (
-                          <button
-                            onClick={() =>
-                              createAppointment({
-                                time: moment(appointment.time).toDate(),
-                                reason: "Your reason here", // You need to provide a reason or get it from the user input
-                                patientId: "Your patient ID here", // You need to provide a patient ID
-                                doctorId: "Your doctor ID here", // You need to provide a doctor ID
-                                isPlaceholder: false,
-                                status: "Pending",
-                              })
-                            }
-                            className="rounded bg-indigo-500 px-4 py-2 font-bold text-white hover:bg-indigo-700"
-                          >
-                            Schedule
-                          </button>
-                        ) : appointment.approved ? (
-                          <button
-                            onClick={() =>
-                              cancelAppointment(appointment.id.toString())
-                            }
-                            className="rounded bg-red-500 px-4 py-2 font-bold text-white hover:bg-red-700"
-                          >
-                            Cancel
-                          </button>
-                        ) : (
-                          <>
-                            <button
-                              onClick={() =>
-                                approveAppointment(appointment.id.toString())
-                              }
-                              className="mr-2 rounded bg-green-500 px-4 py-2 font-bold text-white hover:bg-green-700"
-                            >
-                              Approve
-                            </button>
-                            <button
-                              onClick={() =>
-                                rejectAppointment(appointment.id.toString())
-                              }
-                              className="rounded bg-red-500 px-4 py-2 font-bold text-white hover:bg-red-700"
-                            >
-                              Reject
-                            </button>
-                          </>
-                        )}
-                      </td>
-                    </tr>
-                  ))}
-                </>
-              ))}
-            </tbody>
-          </table>
+        <div className="container mx-auto">
+          <ScheduleTable
+            combinedAppointments={combinedAppointments}
+            handleScheduleClick={handleScheduleClick}
+            cancelAppointment={cancelAppointment}
+            approveAppointment={approveAppointment}
+            rejectAppointment={rejectAppointment}
+          />
         </div>
       </div>
     </>

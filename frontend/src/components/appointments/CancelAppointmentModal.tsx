@@ -1,14 +1,15 @@
 /* eslint-disable no-unused-vars */
 import React from "react";
-import { useContext } from "react";
-import { Fragment, useRef} from "react";
+import { Fragment, useRef, useContext} from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import { AppointmentData } from "../../hooks/useAppointments";
 import { useAppointments } from "../../hooks/useAppointments";
 import { AuthContext } from "../../context/AuthContext";
 
+/* eslint-disable no-unused-vars */
 interface CancelAppointmentModalProps {
+  // eslint-disable-next-line no-unused-vars
   open: boolean;
   setOpen: (open: boolean) => void;
   appointment: AppointmentData;

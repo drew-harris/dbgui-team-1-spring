@@ -4,6 +4,7 @@ import { Doctor, Patient, Appointment } from "@prisma/client";
 import { useMutation, useQueryClient, useQuery } from "react-query";
 import axios from "axios";
 import apiClient from "../utils/apiClient";
+import { ToastSuccess, ToastError } from "../components/toast/toast";
 
 export interface AppointmentData {
   id: string;
@@ -42,7 +43,7 @@ export const useAppointments = (doctorId: string) => {
     >
   ): Promise<AppointmentData> => {
     const { data } = await apiClient.post<AppointmentData>(
-      "http://localhost:8000/appointments",
+      "http://localhost:8000/appointments/doctor",
       appointment
     );
     return data;
@@ -75,6 +76,17 @@ export const useAppointments = (doctorId: string) => {
     return data;
   };
 
+  const updateAppointment = async (
+    appointmentId: string,
+    appointmentData: Partial<AppointmentData>
+  ): Promise<AppointmentData> => {
+    const { data } = await apiClient.put<AppointmentData>(
+      `http://localhost:8000/appointments/${appointmentId}`,
+      appointmentData
+    );
+    return data;
+  };
+
   const {
     data: appointments,
     isLoading,
@@ -82,27 +94,31 @@ export const useAppointments = (doctorId: string) => {
     refetch,
   } = useQuery("appointments", getAppointments);
 
-  const mutationOptions = {
+  const mutationOptions = (operation: string) => ({
     onSuccess: () => {
       queryClient.invalidateQueries("appointments");
+      ToastSuccess(`${operation} successful`);
     },
-  };
+    onError: (error: Error) => {
+      ToastError(`${operation} failed: ${error.message}`);
+    },
+  });
 
   const createAppointmentMutation = useMutation(
     createAppointment,
-    mutationOptions
+    mutationOptions("Create Appointment")
   );
   const cancelAppointmentMutation = useMutation(
     cancelAppointment,
-    mutationOptions
+    mutationOptions("Cancel Appointment")
   );
   const approveAppointmentMutation = useMutation(
     approveAppointment,
-    mutationOptions
+    mutationOptions("Approve Appointment")
   );
   const rejectAppointmentMutation = useMutation(
     rejectAppointment,
-    mutationOptions
+    mutationOptions("Reject Appointment")
   );
 
   return {

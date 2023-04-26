@@ -85,3 +85,21 @@ patientRouter.get("/search", async (req, res) => {
 
   return res.json(patients);
 });
+
+// Update a patient
+patientRouter.put("/:id", async (req, res) => {
+  const id = req.params.id;
+  const patient = await prisma.patient.update({
+    where: {
+      id: id,
+    },
+    data: {
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      email: req.body.email,
+      username: req.body.username,
+    },
+  });
+
+  return res.json(patient);
+});

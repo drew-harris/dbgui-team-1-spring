@@ -2,7 +2,7 @@ import { toast } from "react-hot-toast";
 
 export function ToastSuccess(message: string) {
   toast.success(message, {
-    duration: 4000,
+    duration: 2000,
     style: {
       border: "1px solid #A855F7",
       padding: "16px",
@@ -17,7 +17,7 @@ export function ToastSuccess(message: string) {
 
 export function ToastError(message: string) {
   toast.error(message, {
-    duration: 4000,
+    duration: 2000,
     style: {
       border: "1px solid #EF4444",
       padding: "16px",

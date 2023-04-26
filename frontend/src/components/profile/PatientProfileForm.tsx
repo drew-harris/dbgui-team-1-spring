@@ -1,14 +1,21 @@
 import React, { useState } from "react";
-import { DoctorData } from "../../hooks/useDoctor";
+import { PatientData } from "../../hooks/usePatient";
+import { useDoctor } from "../../hooks/useDoctor";
+import { useNavigate } from "react-router-dom";
 
-interface ProfileFormProps {
-  doctor: DoctorData;
+interface PatientProfileFormProps {
+  patient: PatientData;
   // eslint-disable-next-line no-unused-vars
-  updateDoctor: (updatedDoctorData: Partial<DoctorData>) => void;
+  updatePatient: (updatedPatientData: Partial<PatientData>) => void;
 }
 
-const ProfileForm: React.FC<ProfileFormProps> = ({ doctor, updateDoctor }) => {
-  const [formData, setFormData] = useState<Partial<DoctorData>>(doctor);
+const PatientProfileForm: React.FC<PatientProfileFormProps> = ({
+  patient,
+  updatePatient,
+}) => {
+  const { doctor } = useDoctor(patient.doctorId);
+  const [formData, setFormData] = useState<Partial<PatientData>>(patient);
+  const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -19,12 +26,32 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ doctor, updateDoctor }) => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    updateDoctor(formData);
+    updatePatient(formData);
+  };
+
+  const handleDoctorChange = () => {
+    navigate("/patients/doctor");
   };
 
   return (
     <div className="container mx-auto p-8">
-      <h1 className="mb-4 text-2xl font-bold">Doctor Profile</h1>
+      <h1 className="mb-2 text-2xl font-bold">Patient Profile</h1>
+      <div className="mb-4 flex items-center justify-between">
+        {doctor && (
+          <h2 className="text-xl font-semibold">
+            Current Doctor:{" "}
+            <span className="font-normal">
+              {doctor.firstName} {doctor.lastName}
+            </span>
+          </h2>
+        )}
+        <button
+          onClick={handleDoctorChange}
+          className="rounded bg-indigo-600 px-4 py-2 text-white hover:bg-indigo-700"
+        >
+          Change Doctor
+        </button>
+      </div>
       <form className="space-y-4" onSubmit={handleSubmit}>
         <div className="flex space-x-4">
           <div className="w-1/2">
@@ -80,31 +107,6 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ doctor, updateDoctor }) => {
           />
         </div>
 
-        <div>
-          <label htmlFor="location" className="block text-sm font-medium">
-            Location
-          </label>
-          <input
-            id="location"
-            type="text"
-            value={formData.location}
-            onChange={handleChange}
-            className="block w-full rounded border border-gray-300 p-2 focus:border-indigo-300 focus:outline-none focus:ring"
-          />
-        </div>
-
-        <div>
-          <label htmlFor="practice" className="block text-sm font-medium">
-            Practice
-          </label>
-          <input
-            id="practice"
-            type="text"
-            value={formData.practice}
-            onChange={handleChange}
-            className="block w-full rounded border border-gray-300 p-2 focus:border-indigo-300 focus:outline-none focus:ring"
-          />
-        </div>
         <button
           type="submit"
           className="w-full rounded bg-indigo-600 py-2 text-white hover:bg-indigo-700"
@@ -116,4 +118,4 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ doctor, updateDoctor }) => {
   );
 };
 
-export default ProfileForm;
+export default PatientProfileForm;

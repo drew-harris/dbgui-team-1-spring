@@ -1,7 +1,7 @@
 // src/components/EditAppointmentForm.tsx
 import React, { useState, useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
-import { usePatients } from "../../hooks/usePatients";
+import { usePatients } from "../../hooks/usePatient";
 
 interface EditAppointmentFormProps {
   // eslint-disable-next-line no-unused-vars

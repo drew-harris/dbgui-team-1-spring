@@ -7,7 +7,7 @@ import { CircularProgress } from "@mui/material";
 
 export default function Profile() {
   const { user } = useContext(AuthContext);
-  const { doctor, isLoading } = useDoctor(user.id);
+  const { doctor, isLoading, updateDoctor } = useDoctor(user.id);
 
   return (
     <>
@@ -18,7 +18,7 @@ export default function Profile() {
             <CircularProgress color="secondary" />
           </div>
         ) : (
-          doctor && <ProfileForm doctor={doctor} />
+          doctor && <ProfileForm doctor={doctor} updateDoctor={updateDoctor} />
         )}
       </div>
     </>

@@ -1,8 +1,10 @@
 // src/hooks/useAppointments.ts
-/* eslint-disable no-unused-vars */
-import { Doctor, Patient, Appointment } from "@prisma/client";
-import { useMutation, useQueryClient, useQuery } from "react-query";
-import axios from "axios";
+import {
+  useMutation,
+  useQueryClient,
+  useQuery,
+  MutationFunction,
+} from "react-query";
 import apiClient from "../utils/apiClient";
 import { ToastSuccess, ToastError } from "../components/toast/toast";
 
@@ -25,6 +27,11 @@ export interface AppointmentData {
   isPlaceholder: boolean;
   status: "Pending" | "Approved" | "Rejected" | "Empty";
 }
+
+type UpdateAppointmentFn = MutationFunction<
+  AppointmentData,
+  { appointmentId: string; appointmentData: Partial<AppointmentData> }
+>;
 
 export const useAppointments = (doctorId: string) => {
   const queryClient = useQueryClient();
@@ -76,10 +83,10 @@ export const useAppointments = (doctorId: string) => {
     return data;
   };
 
-  const updateAppointment = async (
-    appointmentId: string,
-    appointmentData: Partial<AppointmentData>
-  ): Promise<AppointmentData> => {
+  const updateAppointment: UpdateAppointmentFn = async ({
+    appointmentId,
+    appointmentData,
+  }) => {
     const { data } = await apiClient.put<AppointmentData>(
       `http://localhost:8000/appointments/${appointmentId}`,
       appointmentData
@@ -120,6 +127,10 @@ export const useAppointments = (doctorId: string) => {
     rejectAppointment,
     mutationOptions("Reject Appointment")
   );
+  const updateAppointmentMutation = useMutation(
+    updateAppointment,
+    mutationOptions("Update Appointment")
+  );
 
   return {
     appointments,
@@ -130,5 +141,6 @@ export const useAppointments = (doctorId: string) => {
     cancelAppointment: cancelAppointmentMutation.mutate,
     approveAppointment: approveAppointmentMutation.mutate,
     rejectAppointment: rejectAppointmentMutation.mutate,
+    updateAppointment: updateAppointmentMutation.mutate,
   };
 };

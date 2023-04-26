@@ -1,6 +1,7 @@
 // src/hooks/useDoctors.ts
 import { useMutation, useQueryClient, useQuery } from "react-query";
 import apiClient from "../utils/apiClient";
+import { ToastSuccess, ToastError } from "../components/toast/toast";
 
 export interface DoctorData {
   id: string;
@@ -18,13 +19,25 @@ export const useDoctor = (doctorId: string) => {
   const queryClient = useQueryClient();
 
   const getDoctor = async (): Promise<DoctorData> => {
-    const { data } = await apiClient.get<DoctorData[]>("/doctors?id=" + doctorId);
+    const { data } = await apiClient.get<DoctorData[]>(
+      "/doctors?id=" + doctorId
+    );
     return data[0];
   };
 
   const searchDoctors = async (query: string): Promise<DoctorData[]> => {
     const { data } = await apiClient.get<DoctorData[]>(
       `/doctors/search?query=${query}`
+    );
+    return data;
+  };
+
+  const updateDoctor = async (
+    updatedDoctorData: Partial<DoctorData>
+  ): Promise<DoctorData> => {
+    const { data } = await apiClient.put<DoctorData>(
+      "/doctors",
+      updatedDoctorData
     );
     return data;
   };
@@ -36,13 +49,25 @@ export const useDoctor = (doctorId: string) => {
     refetch,
   } = useQuery("doctors", getDoctor);
 
-  const mutationOptions = {
+  const mutationOptions = (operation: string) => ({
     onSuccess: () => {
       queryClient.invalidateQueries("doctors");
+      ToastSuccess(`${operation} successful`);
     },
-  };
+    onError: (error: Error) => {
+      ToastError(`${operation} failed: ${error.message}`);
+    },
+  });
 
-  const searchDoctorsMutation = useMutation(searchDoctors, mutationOptions);
+  const updateDoctorMutation = useMutation(
+    updateDoctor,
+    mutationOptions("Update Doctor")
+  );
+
+  const searchDoctorsMutation = useMutation(
+    searchDoctors,
+    mutationOptions("Search Doctors")
+  );
 
   return {
     doctor,
@@ -50,5 +75,6 @@ export const useDoctor = (doctorId: string) => {
     error,
     refetch,
     searchDoctors: searchDoctorsMutation.mutate,
+    updateDoctor: updateDoctorMutation.mutate,
   };
 };

@@ -136,3 +136,24 @@ doctorRouter.post("/unlink", async (req, res) => {
 
   res.json(patient); // returns the patient with null doctor
 });
+
+// Update a doctor's info
+doctorRouter.put("/", async (req, res) => {
+  const body = req.body;
+  const doctor = await prisma.doctor.update({
+    where: {
+      id: req.user.id,
+    },
+    data: {
+      firstName: body.firstName,
+      lastName: body.lastName,
+      email: body.email,
+      practice: body.practice,
+      location: body.location,
+      scheduleStartTime: body.scheduleStartTime ? parseInt(body.scheduleStartTime) : undefined,
+      scheduleEndTime: body.scheduleEndTime ? parseInt(body.scheduleEndTime) : undefined,
+    },
+  });
+
+  res.json(doctor);
+})

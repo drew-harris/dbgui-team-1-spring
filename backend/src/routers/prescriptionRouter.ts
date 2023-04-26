@@ -12,6 +12,10 @@ const prescriptionRouter = Router();
 prescriptionRouter.get("/", patientOnlyMiddleware, async (req, res) => {
   const prescriptions = await prisma.prescription.findMany({
     where: { patientId: req.user.id },
+    include: {
+      doctor: true,
+      patient: true,
+    },
   });
   res.json(prescriptions);
 });
@@ -19,6 +23,10 @@ prescriptionRouter.get("/", patientOnlyMiddleware, async (req, res) => {
 prescriptionRouter.get("/doctor", doctorOnlyMiddleware, async (req, res) => {
   const prescriptions = await prisma.prescription.findMany({
     where: { doctorId: req.user.id },
+    include: {
+      doctor: true,
+      patient: true,
+    },
   });
   res.json(prescriptions);
 });

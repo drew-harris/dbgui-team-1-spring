@@ -1,4 +1,6 @@
-import { Fragment, useRef, useContext } from "react";
+/* eslint-disable no-unused-vars */
+import React from "react";
+import { Fragment, useRef, useContext} from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import { AppointmentData } from "../../hooks/useAppointments";

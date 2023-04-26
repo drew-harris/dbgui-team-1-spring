@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useContext } from "react";
 import NavBar from "../../components/nav/DoctorNavBar";
 import { useAppointments } from "../../hooks/useAppointments";

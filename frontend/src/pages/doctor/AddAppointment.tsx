@@ -1,6 +1,4 @@
-import NavBar from "../../components/all/NavBar";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
+/* eslint-disable no-unused-vars */
 import { useAppointments } from "../../hooks/useAppointments";
 import NavBar from "../../components/all/NavBar";
 import { AuthContext } from "../../context/AuthContext";

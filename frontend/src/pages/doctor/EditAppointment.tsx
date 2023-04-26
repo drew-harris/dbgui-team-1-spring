@@ -3,16 +3,19 @@ import NavBar from "../../components/nav/DoctorNavBar";
 import { useParams } from "react-router-dom";
 import EditAppointmentForm from "../../components/appointments/EditAppointmentForm";
 import { useAppointments } from "../../hooks/useAppointments";
+import { useContext } from "react";
+import { AuthContext } from "../../context/AuthContext";
 
 const EditAppointmentPage: React.FC = () => {
   const { id: appointmentId } = useParams<{ id: string }>();
   const [appointment, setAppointment] = useState(null);
+  const { user } = useContext(AuthContext);
 
   const {
     appointments,
     refetch,
     updateAppointment: updateAppointmentMutation,
-  } = useAppointments("");
+  } = useAppointments(user.id);
 
   useEffect(() => {
     const fetchAppointmentData = async () => {
@@ -27,7 +30,10 @@ const EditAppointmentPage: React.FC = () => {
   }, [appointmentId, appointments, refetch]);
 
   const handleFormSubmit = async (updatedAppointmentData) => {
-    await updateAppointmentMutation(appointmentId, updatedAppointmentData);
+    await updateAppointmentMutation({
+      appointmentId,
+      appointmentData: updatedAppointmentData,
+    });
   };
 
   return (

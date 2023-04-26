@@ -1,17 +1,59 @@
-import React from "react";
+import React, { useState } from "react";
 import { DoctorData } from "../../hooks/useDoctor";
 
 interface ProfileFormProps {
   doctor: DoctorData;
+  // eslint-disable-next-line no-unused-vars
+  updateDoctor: (updatedDoctorData: Partial<DoctorData>) => void;
 }
 
-const ProfileForm: React.FC<ProfileFormProps> = ({ doctor }) => {
-  const { email, username, firstName, lastName, location, practice } = doctor;
+const ProfileForm: React.FC<ProfileFormProps> = ({ doctor, updateDoctor }) => {
+  const [formData, setFormData] = useState<Partial<DoctorData>>(doctor);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.id]: e.target.value,
+    });
+  };
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    updateDoctor(formData);
+  };
 
   return (
     <div className="container mx-auto p-8">
       <h1 className="mb-4 text-2xl font-bold">Doctor Profile</h1>
-      <form className="space-y-4">
+      <form className="space-y-4" onSubmit={handleSubmit}>
+        <div className="flex space-x-4">
+          <div className="w-1/2">
+            <label htmlFor="firstName" className="block text-sm font-medium">
+              First Name
+            </label>
+            <input
+              id="firstName"
+              type="text"
+              value={formData.firstName}
+              onChange={handleChange}
+              className="block w-full rounded border border-gray-300 p-2 focus:border-indigo-300 focus:outline-none focus:ring"
+            />
+          </div>
+
+          <div className="w-1/2">
+            <label htmlFor="lastName" className="block text-sm font-medium">
+              Last Name
+            </label>
+            <input
+              id="lastName"
+              type="text"
+              value={formData.lastName}
+              onChange={handleChange}
+              className="block w-full rounded border border-gray-300 p-2 focus:border-indigo-300 focus:outline-none focus:ring"
+            />
+          </div>
+        </div>
+
         <div>
           <label htmlFor="email" className="block text-sm font-medium">
             Email
@@ -19,8 +61,8 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ doctor }) => {
           <input
             id="email"
             type="email"
-            value={email}
-            disabled
+            value={formData.email}
+            onChange={handleChange}
             className="block w-full rounded border border-gray-300 p-2 focus:border-indigo-300 focus:outline-none focus:ring"
           />
         </div>
@@ -32,34 +74,8 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ doctor }) => {
           <input
             id="username"
             type="text"
-            value={username}
-            disabled
-            className="block w-full rounded border border-gray-300 p-2 focus:border-indigo-300 focus:outline-none focus:ring"
-          />
-        </div>
-
-        <div>
-          <label htmlFor="firstName" className="block text-sm font-medium">
-            First Name
-          </label>
-          <input
-            id="firstName"
-            type="text"
-            value={firstName}
-            disabled
-            className="block w-full rounded border border-gray-300 p-2 focus:border-indigo-300 focus:outline-none focus:ring"
-          />
-        </div>
-
-        <div>
-          <label htmlFor="lastName" className="block text-sm font-medium">
-            Last Name
-          </label>
-          <input
-            id="lastName"
-            type="text"
-            value={lastName}
-            disabled
+            value={formData.username}
+            onChange={handleChange}
             className="block w-full rounded border border-gray-300 p-2 focus:border-indigo-300 focus:outline-none focus:ring"
           />
         </div>
@@ -71,8 +87,8 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ doctor }) => {
           <input
             id="location"
             type="text"
-            value={location}
-            disabled
+            value={formData.location}
+            onChange={handleChange}
             className="block w-full rounded border border-gray-300 p-2 focus:border-indigo-300 focus:outline-none focus:ring"
           />
         </div>
@@ -84,15 +100,13 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ doctor }) => {
           <input
             id="practice"
             type="text"
-            value={practice}
-            disabled
+            value={formData.practice}
+            onChange={handleChange}
             className="block w-full rounded border border-gray-300 p-2 focus:border-indigo-300 focus:outline-none focus:ring"
           />
         </div>
-
         <button
-          type="button"
-          disabled
+          type="submit"
           className="w-full rounded bg-indigo-600 py-2 text-white hover:bg-indigo-700"
         >
           Update Profile

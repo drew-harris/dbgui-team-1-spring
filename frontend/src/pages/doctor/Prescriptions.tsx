@@ -16,12 +16,17 @@ import {
   DialogContent,
   TextField,
   DialogActions,
-  Button
+  Button,
+  InputLabel,
+  Select,
+  MenuItem
 } from "@mui/material";
 import NavBar from "../../components/nav/DoctorNavBar";
 
 
 const DoctorPrescriptions = () => {
+  const [allPatients, setAllPatients] = useState([]);
+  const [selectedPatient, setSelectedPatient] = useState('');
   const [prescriptions, setPrescriptions] = useState([]);
   const [medication, setMedication] = useState('');
   const [duration, setDuration] = useState('');
@@ -29,9 +34,21 @@ const DoctorPrescriptions = () => {
   const [frequency, setFrequency] = useState('');
   const [comment, setComment] = useState('');
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [options, setOptions] = useState([]);
+  const [refresh, setRefresh] = useState(0);
+
 
   const handleSave = () => {
-    // do something with the entered data
+    const newPrescription = {
+    "patientId": selectedPatient,
+    "medication" : medication,
+    "dosage" : dosage,
+    "frequency" : frequency,
+    "duration" : duration,
+    "comment" : comment
+    }
+    makeNewPrescription(newPrescription);
+    setRefresh(refresh + 1);
     handleClose();
   };
 
@@ -58,6 +75,40 @@ const DoctorPrescriptions = () => {
     }
   };
 
+  const makeNewPrescription = async (prescription) => {
+    const headers = {authorization: localStorage.getItem("jwt")}
+    try {
+      const response = await axios.post("http://localhost:8000/prescriptions",
+        prescription,
+        { headers }
+      );
+      console.log(response);
+
+    } catch (error) {
+      console.error("Error fetching prescriptions:", error);
+    }
+  };
+
+  const fetchPatients = async () => {
+    try {
+      const response = await axios.get("http://localhost:8000/patients", {
+        headers: {
+          authorization: localStorage.getItem("jwt"),
+        },
+      });
+      console.log("PATIENTS::::::::::");
+      console.log(response.data);
+      setAllPatients(response.data);
+
+    } catch (error) {
+      console.error("Error fetching prescriptions:", error);
+    }
+  };
+
+  // load the patient data
+  useEffect(() => {
+    fetchPatients();
+  }, []);
 
   const fetchData = async () => {
     try {
@@ -67,7 +118,7 @@ const DoctorPrescriptions = () => {
         },
       });
       setPrescriptions(response.data);
-      console.log(response);
+      console.log(response.data);
 
     } catch (error) {
       console.error("Error fetching prescriptions:", error);
@@ -77,13 +128,39 @@ const DoctorPrescriptions = () => {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [refresh]);
+  
+  useEffect(() => {
+    var new_options = [];
+
+    for (let i = 0; i < allPatients.length; ++i) {
+      new_options.push({
+        value: allPatients[i].id,
+        label: allPatients[i].firstName + " " + allPatients[i].lastName
+      })
+    }
+
+    setOptions(new_options);
+  }, [allPatients]);
 
   return (
     <>
       <Dialog open={dialogOpen} onClose={handleClose}>
       <DialogTitle>Add Prescription</DialogTitle>
       <DialogContent>
+        <InputLabel id="select-label">Select a Patient</InputLabel>
+        <Select
+          labelId="select-label"
+          value={selectedPatient}
+          onChange={(event) => {
+            setSelectedPatient(event.target.value)
+          }}>
+            {options.map((option) => (
+              <MenuItem key={option.value} value={option.value}>
+                {option.label}
+              </MenuItem>
+            ))}
+          </Select>
         <TextField label="Medication" value={medication} onChange={e => setMedication(e.target.value)} fullWidth margin="normal" />
         <TextField label="Duration" value={duration} onChange={e => setDuration(e.target.value)} fullWidth margin="normal" />
         <TextField label="Dosage" value={dosage} onChange={e => setDosage(e.target.value)} fullWidth margin="normal" />
@@ -104,13 +181,12 @@ const DoctorPrescriptions = () => {
           onClick={() => setDialogOpen(true)}
           className="rounded-md bg-indigo-500 px-6 py-2 font-bold text-white hover:bg-indigo-700"
         >
-          New Appointment
+          New Prescription
         </button>
         <TableContainer component={Paper}>
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>ID</TableCell>
                 <TableCell>Patient</TableCell>
                 <TableCell>Medication</TableCell>
                 <TableCell>Dosage</TableCell>
@@ -121,8 +197,7 @@ const DoctorPrescriptions = () => {
             <TableBody>
               {prescriptions.map((prescription) => (
                 <TableRow key={prescription.id}>
-                  <TableCell>{prescription.name}</TableCell>
-                  <TableCell>{prescription.patient}</TableCell>
+                  <TableCell>{prescription.patient.firstName}</TableCell>
                   <TableCell>{prescription.medication}</TableCell>
                   <TableCell>{prescription.dosage}</TableCell>
                   <TableCell>{prescription.frequency}</TableCell>

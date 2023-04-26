@@ -21,6 +21,7 @@ import ChooseDoctor from "./pages/patient/ChooseDoctor";
 import PatientAppointments from "./pages/patient/Appointments";
 import PatientProfile from "./pages/patient/Profile";
 import PatientSchedule from "./pages/patient/Schedule";
+import PatientAppointmentsAdd from "./pages/patient/AddAppointments";
 
 import { AuthContext } from "./context/AuthContext";
 import DoctorPrescriptions from "./pages/doctor/Prescriptions";
@@ -89,6 +90,10 @@ const App: React.FC = () => {
           />
           <Route path="/patient/schedule" element={<PatientSchedule />} />
           <Route path="/patient/profile" element={<PatientProfile />} />
+          <Route
+            path="/patient/appointments/new"
+            element={<PatientAppointmentsAdd />}
+          />
         </Route>
         <Route path="*" element={<div>404 page not found</div>} />
       </Routes>

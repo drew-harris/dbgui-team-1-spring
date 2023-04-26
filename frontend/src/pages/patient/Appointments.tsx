@@ -56,6 +56,10 @@ export const PatientAppointments: React.FC = () => {
             </button>
           </Link>
         </div>
+        <p className="mb-4">
+          These are your current active appointments. You will need an
+          appointment approved before you can come in.
+        </p>
         <div>
           <PatientAppointmentTable appointments={appointments} />
         </div>

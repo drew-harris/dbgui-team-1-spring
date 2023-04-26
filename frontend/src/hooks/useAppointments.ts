@@ -1,8 +1,10 @@
 // src/hooks/useAppointments.ts
-/* eslint-disable no-unused-vars */
-import { Doctor, Patient, Appointment } from "@prisma/client";
-import { useMutation, useQueryClient, useQuery, MutationFunction } from "react-query";
-import axios from "axios";
+import {
+  useMutation,
+  useQueryClient,
+  useQuery,
+  MutationFunction,
+} from "react-query";
 import apiClient from "../utils/apiClient";
 import { ToastSuccess, ToastError } from "../components/toast/toast";
 
@@ -81,16 +83,16 @@ export const useAppointments = (doctorId: string) => {
     return data;
   };
 
-  const updateAppointment: UpdateAppointmentFn = async (
-    { appointmentId, appointmentData }
-  ) => {
+  const updateAppointment: UpdateAppointmentFn = async ({
+    appointmentId,
+    appointmentData,
+  }) => {
     const { data } = await apiClient.put<AppointmentData>(
       `http://localhost:8000/appointments/${appointmentId}`,
       appointmentData
     );
     return data;
   };
-
 
   const {
     data: appointments,
@@ -129,7 +131,6 @@ export const useAppointments = (doctorId: string) => {
     updateAppointment,
     mutationOptions("Update Appointment")
   );
-
 
   return {
     appointments,

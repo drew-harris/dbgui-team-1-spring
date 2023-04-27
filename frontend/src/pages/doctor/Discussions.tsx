@@ -17,7 +17,10 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import NavBar from "../../components/nav/DoctorNavBar";
 
+
+
 export default function Discussions() {
+
   const [discussions, setDiscussions] = useState([]);
   const navigate = useNavigate();
 
@@ -40,26 +43,35 @@ export default function Discussions() {
 
   return (
     <>
+
       <NavBar />
+      <br>
+      </br>
+      <br>
+      </br>
       <Box
         sx={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}
       >
-        <Grid container sx={{ paddingTop: "64px" }}>
-          <Grid item xs={10} sx={{ marginLeft: "25%" }}>
-            <Container sx={{ flex: "1 0 auto" }}>
-              <Box sx={{ marginBottom: 2 }}>
+        <Typography variant="h3" component="h1" gutterBottom align="center">
+                Discussion Board
+        </Typography>
+        <Grid container>
+          <Grid item xs={10}>
+            <Container>
+              <Box>
                 <AddDiscussionForm onAdd={fetchData} />
               </Box>
-              <Typography variant="h3" component="h1" gutterBottom>
-                Discussion Board
-              </Typography>
+              
               <Grid container spacing={3}>
-                {discussions.map((discussion) => (
+                {discussions.sort((a, b) => {
+                    var date1 = new Date(a.createdAt);
+                    var date2 = new Date(b.createdAt);
+                    return date2.getTime() - date1.getTime();
+                  }).map((discussion) => (
                   <Grid item xs={12} key={discussion.id}>
                     <Card>
                       <CardHeader
                         title={discussion.title}
-                        subheader={`Created by ${discussion.createdById} at ${discussion.createdAt}`}
                       />
                       <CardContent>
                         <Typography variant="body1">

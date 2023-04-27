@@ -26,6 +26,7 @@ prescriptionRouter.get("/doctor", doctorOnlyMiddleware, async (req, res) => {
     include: {
       doctor: true,
       patient: true,
+      refills: true,
     },
   });
   res.json(prescriptions);
@@ -86,9 +87,27 @@ prescriptionRouter.delete("/:id", doctorOnlyMiddleware, async (req, res) => {
   await prisma.prescription.delete({
     where: { id },
   });
+  
 
   res.json({ success: true });
 });
+
+// Request a refill on a prescription (doctor only)
+prescriptionRouter.post(
+  "/:id/refill",
+  doctorOnlyMiddleware,
+  async (req, res) => {
+    const { id } = req.params;
+
+    const refillRequest = await prisma.refill.create({
+      data: {
+        prescriptionId: id,
+      },
+    });
+
+    res.json(refillRequest);
+  }
+);
 
 // Request a refill on a prescription (patient only)
 prescriptionRouter.post(

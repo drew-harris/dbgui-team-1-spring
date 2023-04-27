@@ -1,19 +1,27 @@
+/* eslint-disable no-unused-vars */
 import React, { useState } from 'react';
 import axios from 'axios';
 import { Button, TextField, Container} from '@mui/material';
+import { useContext } from "react";
+import { AuthContext } from "../../context/AuthContext";
+import { useDoctor } from "../../hooks/useDoctor";
+import { DoctorData } from "../../hooks/useDoctor";
+
 
 interface AddDiscussionFormProps {
   onAdd: () => void;
 }
 
 const AddDiscussionForm: React.FC<AddDiscussionFormProps> = ({ onAdd }) => {
+  const { user } = useContext(AuthContext);
+  const { doctor, isLoading, updateDoctor } = useDoctor(user.id);
+  const [formData, setFormData] = useState<Partial<DoctorData>>(doctor);
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
   const [createdById, setCreatedById] = useState('');
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-  
     try {
       await axios.post(
         'http://localhost:8000/discussions/',
@@ -31,7 +39,6 @@ const AddDiscussionForm: React.FC<AddDiscussionFormProps> = ({ onAdd }) => {
   
       setTitle('');
       setBody('');
-      setCreatedById('');
   
       if (onAdd) {
         onAdd();
@@ -43,7 +50,7 @@ const AddDiscussionForm: React.FC<AddDiscussionFormProps> = ({ onAdd }) => {
   
 
   return (
-    <Container maxWidth="sm">
+    <Container>
       <form onSubmit={handleSubmit}>
         <TextField
           label="Title"
@@ -61,14 +68,6 @@ const AddDiscussionForm: React.FC<AddDiscussionFormProps> = ({ onAdd }) => {
           margin="normal"
           value={body}
           onChange={(event) => setBody(event.target.value)}
-          required
-        />
-        <TextField
-          label="Created By"
-          fullWidth
-          margin="normal"
-          value={createdById}
-          onChange={(event) => setCreatedById(event.target.value)}
           required
         />
         <Button variant="contained" color="primary" type="submit">

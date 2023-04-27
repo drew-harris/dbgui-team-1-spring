@@ -36,6 +36,7 @@ const DoctorPrescriptions = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [options, setOptions] = useState([]);
   const [refresh, setRefresh] = useState(0);
+  const [filteredPrescriptions, setFilteredPrescriptions] = useState([]);
 
 
   const handleSave = () => {
@@ -61,13 +62,11 @@ const DoctorPrescriptions = () => {
     setDialogOpen(false);
   };
 
-  const approvePrescriptions = async (prescriptionId) => {
+  const approvePrescriptions = async (prescriptionId, action) => {
     try {
-      const response = await axios.put(`http://localhost:8000/prescriptions/${"clgflp9n10000rmkkj3hqsmvd"}/accept`, {
-        headers: {
-          authorization: localStorage.getItem("jwt"),
-        },
-      });
+      const headers = {authorization: localStorage.getItem("jwt")};
+      const body = {};
+      const response = await axios.put(`http://localhost:8000/prescriptions/${prescriptionId}/refill/${action}`,body, {headers});
       console.log(response);
 
     } catch (error) {
@@ -75,14 +74,43 @@ const DoctorPrescriptions = () => {
     }
   };
 
+  const declinePrescriptions = async (prescriptionId) => {
+    try {
+      const headers = {authorization: localStorage.getItem("jwt")};
+      const body = {};
+      const response = await axios.delete(`http://localhost:8000/prescriptions/${prescriptionId}`, {headers});
+      console.log(response);
+
+    } catch (error) {
+      console.error("Error deleting prescriptions:", error);
+    }
+  }
+
+  const makeNewRequest = async (prescriptionid) => {
+    const headers = {authorization: localStorage.getItem("jwt")};
+    const body = {};
+      try {
+        axios.post(`http://localhost:8000/prescriptions/${prescriptionid}/refill`, 
+        body,
+        {headers}
+        );
+      }
+      catch (error) {
+        console.error("error fetching request", error);
+      }
+  };
+
   const makeNewPrescription = async (prescription) => {
-    const headers = {authorization: localStorage.getItem("jwt")}
+    const headers = {authorization: localStorage.getItem("jwt")};
     try {
       const response = await axios.post("http://localhost:8000/prescriptions",
         prescription,
         { headers }
       );
+      const id_to_add = response.data.id;
       console.log(response);
+      makeNewRequest(id_to_add);
+
 
     } catch (error) {
       console.error("Error fetching prescriptions:", error);
@@ -125,10 +153,28 @@ const DoctorPrescriptions = () => {
     }
   };
 
+  useEffect(() => {
+    var temp = [...prescriptions];
+
+    var newTemp = []
+    for (let i = 0; i < temp.length; i++) {
+      if (prescriptions[i].refills.length == 0) {
+        newTemp.push(prescriptions[i]);
+      }
+      else if (prescriptions[i].refills[prescriptions[i].refills.length - 1].approved == false) {
+        newTemp.push(prescriptions[i]);
+      }
+    }
+
+    console.log("TEMP+++++++");
+    console.log(newTemp);
+
+    setFilteredPrescriptions(newTemp);
+  }, [prescriptions]);
 
   useEffect(() => {
     fetchData();
-  }, [refresh]);
+  }, []);
   
   useEffect(() => {
     var new_options = [];
@@ -195,7 +241,7 @@ const DoctorPrescriptions = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {prescriptions.map((prescription) => (
+              {filteredPrescriptions.map((prescription) => (
                 <TableRow key={prescription.id}>
                   <TableCell>{prescription.patient.firstName}</TableCell>
                   <TableCell>{prescription.medication}</TableCell>
@@ -205,7 +251,7 @@ const DoctorPrescriptions = () => {
                   <TableCell>
                     <button
                       onClick={() => {
-                        approvePrescriptions(prescription.id);
+                        approvePrescriptions(prescription.refills[prescription.refills.length - 1].id, "accept");
                       }}
                       className="mr-2 rounded bg-green-500 px-4 py-2 font-bold text-white hover:bg-green-700">
                       Approve
@@ -213,12 +259,16 @@ const DoctorPrescriptions = () => {
                   </TableCell>
                   <TableCell>
                     <button
+                        onClick={() => {
+                        // declinePrescriptions(prescription.id);
+                        approvePrescriptions(prescription.refills[prescription.refills.length - 1].id, "accept");
+                      }}
                       className="rounded bg-red-500 px-4 py-2 font-bold text-white hover:bg-red-700">
                       Reject
                     </button>
                   </TableCell>
                 </TableRow>
-              ))}
+))}
             </TableBody>
           </Table>
         </TableContainer>

@@ -4,11 +4,12 @@ import { toast } from "react-hot-toast";
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { API_URL } from "../utils/url";
 
 
 const signupDoctor = async (data) => {
   const response = await axios.post(
-    "http://localhost:8000/user/doctor/signup",
+    API_URL + "/user/doctor/signup",
     data
   );
   return response.data;
@@ -16,7 +17,7 @@ const signupDoctor = async (data) => {
 
 const signupPatient = async (data) => {
   const response = await axios.post(
-    "http://localhost:8000/user/patient/signup",
+    "API_URL/user/patient/signup",
     data
   );
   return response.data;
@@ -51,7 +52,7 @@ export const useSignup = () => {
 
 const signinDoctor = async (data: { email: string; password: string }) => {
   const response = await axios.post(
-    "http://localhost:8000/user/doctor/signin",
+    API_URL + "/user/doctor/signin",
     data
   );
   
@@ -64,7 +65,7 @@ const signinDoctor = async (data: { email: string; password: string }) => {
 
 const signinPatient = async (data: { email: string; password: string }) => {
   const response = await axios.post(
-    "http://localhost:8000/user/patient/signin",
+    API_URL + "/user/patient/signin",
     data
   );
   if (response.status !== 200 ) {

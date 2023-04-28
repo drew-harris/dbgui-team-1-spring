@@ -45,7 +45,7 @@ export default function Dashboard() {
 
   return (
     <>
-      <NavBar />
+      <NavBar/>
       <div>
         <Box sx={{ flexGrow: 1 }}>
           <Grid item xs={12}>
@@ -59,9 +59,6 @@ export default function Dashboard() {
                 {patient?.firstName} {patient?.lastName}
               </Typography>
               <Box sx={{ flexGrow: 1 }} />
-              <Badge badgeContent={4} color="secondary">
-                <Notifications />
-              </Badge>
               <Button variant="outlined" sx={{ ml: 2 }} onClick={handleLogout}>
                 Logout
               </Button>
@@ -75,9 +72,6 @@ export default function Dashboard() {
                   No upcoming appointments.
                 </Typography>
               </Box>
-              <Button variant="contained" onClick={handleAppointment}>
-                Make Appointment
-              </Button>
             </Paper>
           </Grid>
           <Grid item xs={6}>
@@ -86,9 +80,6 @@ export default function Dashboard() {
               <Box sx={{ mt: 2 }}>
                 <Typography variant="subtitle1">No prescriptions</Typography>
               </Box>
-              <Button variant="contained" onClick={handlePrescription}>
-                Request Refill
-              </Button>
             </Paper>
           </Grid>
         </Box>

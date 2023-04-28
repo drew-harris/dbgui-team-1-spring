@@ -10,11 +10,9 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { deleteJwt } from "../../utils/jwt";
 
 const navigation = [
-  { name: "Dashboard", href: "/patient/dashboard" },
-  { name: "Prescription", href: "/patient/prescriptions" },
+  { name: "Prescription", href: "/patient/dashboard" },
   { name: "Appointment", href: "/patient/appointments" },
   { name: "Schedule", href: "/patient/schedule" },
-  { name: "Discussion", href: "/patient/discussions" },
 ];
 
 function classNames(...classes) {

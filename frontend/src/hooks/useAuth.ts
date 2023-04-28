@@ -17,7 +17,7 @@ const signupDoctor = async (data) => {
 
 const signupPatient = async (data) => {
   const response = await axios.post(
-    "API_URL/user/patient/signup",
+    API_URL+ "/user/patient/signup",
     data
   );
   return response.data;

@@ -39,7 +39,7 @@ export const PatientAppointments: React.FC = () => {
     return (
       <>
         <NavBar />
-        <div>No appointments found.</div>
+        <div className="p-8">No appointments found.</div>
       </>
     );
   }

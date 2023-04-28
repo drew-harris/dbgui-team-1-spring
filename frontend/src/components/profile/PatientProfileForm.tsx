@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { PatientData } from "../../hooks/usePatient";
 import { useDoctor } from "../../hooks/useDoctor";
-import { useNavigate } from "react-router-dom";
 
 interface PatientProfileFormProps {
   patient: PatientData;
@@ -15,7 +14,6 @@ const PatientProfileForm: React.FC<PatientProfileFormProps> = ({
 }) => {
   const { doctor } = useDoctor(patient.doctorId);
   const [formData, setFormData] = useState<Partial<PatientData>>(patient);
-  const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -29,9 +27,7 @@ const PatientProfileForm: React.FC<PatientProfileFormProps> = ({
     updatePatient(formData);
   };
 
-  const handleDoctorChange = () => {
-    navigate("/patients/doctor");
-  };
+
 
   return (
     <div className="container mx-auto p-8">
@@ -45,12 +41,6 @@ const PatientProfileForm: React.FC<PatientProfileFormProps> = ({
             </span>
           </h2>
         )}
-        <button
-          onClick={handleDoctorChange}
-          className="rounded bg-indigo-600 px-4 py-2 text-white hover:bg-indigo-700"
-        >
-          Change Doctor
-        </button>
       </div>
       <form className="space-y-4" onSubmit={handleSubmit}>
         <div className="flex space-x-4">

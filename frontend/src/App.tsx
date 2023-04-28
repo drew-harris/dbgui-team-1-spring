@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useContext, useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import DoctorRoute from "./router/DoctorRoute";
@@ -22,6 +23,7 @@ import PatientAppointments from "./pages/patient/Appointments";
 import PatientProfile from "./pages/patient/Profile";
 import PatientSchedule from "./pages/patient/Schedule";
 import PatientAppointmentsAdd from "./pages/patient/AddAppointments";
+import PatientPrescriptions from "./pages/patient/Prescription";
 
 import { AuthContext } from "./context/AuthContext";
 import DoctorPrescriptions from "./pages/doctor/Prescriptions";
@@ -59,7 +61,7 @@ const App: React.FC = () => {
         <Route path="/" element={<Signup />} />
         <Route path="/login" element={<Signin />} />
         <Route element={<DoctorRoute isLoggedIn={isLoggedIn} type={type} />}>
-          <Route path="/doctor/dashboard" element={<DoctorDashboard />} />
+          <Route path="/doctor/dashboard" element={<DoctorPrescriptions />} />
           <Route path="/doctor/discussions" element={<DoctorDiscussion />} />
           <Route path="/doctor/appointments" element={<DoctorAppointments />} />
           <Route path="/doctor/schedule" element={<DoctorSchedule />} />
@@ -83,11 +85,12 @@ const App: React.FC = () => {
         </Route>
         <Route element={<PatientRoute isLoggedIn={isLoggedIn} type={type} />}>
           <Route path="/patient/doctors" element={<ChooseDoctor />} />
-          <Route path="/patient/dashboard" element={<PatientDashboard />} />
+          <Route path="/patient/dashboard" element={<PatientPrescriptions />} />
           <Route
             path="/patient/appointments"
             element={<PatientAppointments />}
           />
+          <Route path="/patient/prescriptions" element={<PatientPrescriptions />} />
           <Route path="/patient/schedule" element={<PatientSchedule />} />
           <Route path="/patient/profile" element={<PatientProfile />} />
           <Route

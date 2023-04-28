@@ -65,7 +65,7 @@ const PatientPrescriptions = () => {
     <>
       <NavBar />
       <Container>
-        <Typography variant="h4" component="h1" gutterBottom>
+        <Typography variant="h4" pt={3} component="h1" gutterBottom>
           My Prescriptions
         </Typography>
         <TableContainer component={Paper}>

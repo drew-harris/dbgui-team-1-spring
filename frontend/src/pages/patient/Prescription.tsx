@@ -1,26 +1,14 @@
 /* eslint-disable no-unused-vars */
-import React, { useState, useEffect } from "react";
-import axios from "axios";
 import {
-  Container,
-  Typography,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  TextField,
-  DialogActions,
-  Button,
-  InputLabel,
-  Select,
-  MenuItem
+    Container, Paper, Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow, Typography
 } from "@mui/material";
+import axios from "axios";
+import { useEffect, useState } from "react";
 import NavBar from "../../components/nav/PatientNavBar";
 import { API_URL } from "../../utils/url";
 

@@ -26,21 +26,7 @@ import { API_URL } from "../../utils/url";
 
 
 const PatientPrescriptions = () => {
-  const [allPatients, setAllPatients] = useState([]);
-  const [selectedPatient, setSelectedPatient] = useState('');
   const [prescriptions, setPrescriptions] = useState([]);
-  const [medication, setMedication] = useState('');
-  const [duration, setDuration] = useState('');
-  const [dosage, setDosage] = useState('');
-  const [frequency, setFrequency] = useState('');
-  const [comment, setComment] = useState('');
-  const [dialogOpen, setDialogOpen] = useState(false);
-  const [options, setOptions] = useState([]);
-  const [refresh, setRefresh] = useState(0);
-  const [filteredPrescriptions, setFilteredPrescriptions] = useState([]);
-
-
-
 
   const fetchData = async () => {
     try {

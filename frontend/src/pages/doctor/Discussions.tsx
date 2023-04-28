@@ -1,20 +1,13 @@
 /* eslint-disable no-unused-vars */
 import {
-  Container,
-  Typography,
-  Card,
-  CardContent,
-  CardHeader,
-  Grid,
-  Box,
-  Button,
-  AppBar,
-  Toolbar,
+    Box, Card,
+    CardContent,
+    CardHeader, Container, Grid, Typography
 } from "@mui/material";
-import { useEffect, useState } from "react";
-import AddDiscussionForm from "../../components/discussions/AddPost";
 import axios from "axios";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import AddDiscussionForm from "../../components/discussions/AddPost";
 import NavBar from "../../components/nav/DoctorNavBar";
 import { API_URL } from "../../utils/url";
 

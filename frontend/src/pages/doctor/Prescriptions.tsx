@@ -221,7 +221,7 @@ const DoctorPrescriptions = () => {
     </Dialog>
       <NavBar />
       <Container>
-        <Typography variant="h4" pt={24} component="h1" gutterBottom>
+        <Typography variant="h4" pt={4} component="h1" gutterBottom>
           My Prescriptions
         </Typography>
         <button

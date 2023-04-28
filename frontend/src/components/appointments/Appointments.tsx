@@ -28,7 +28,20 @@ export const Appointments: React.FC = () => {
   }
 
   if (!appointments || appointments.length === 0) {
-    return <div>No appointments found.</div>;
+    return (
+      <div className="flex min-h-screen flex-col items-center justify-center">
+        <h1 className="mb-4 text-3xl font-semibold">Appointments</h1>
+        <div className="mb-6 text-center text-2xl">
+          No appointments created. Go to schedule to schedule a new appointment!
+        </div>
+        <button
+          onClick={() => navigate("/doctor/appointments/new")}
+          className="rounded-md bg-indigo-500 px-6 py-2 font-bold text-white hover:bg-indigo-700"
+        >
+          New Appointment
+        </button>
+      </div>
+    );
   }
 
   const approvedAppointments = appointments.filter(

@@ -16,6 +16,7 @@ import AddDiscussionForm from "../../components/discussions/AddPost";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import NavBar from "../../components/nav/DoctorNavBar";
+import { API_URL } from "../../utils/url";
 
 
 
@@ -26,7 +27,7 @@ export default function Discussions() {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get("http://localhost:8000/discussions/", {
+      const response = await axios.get(API_URL + "/discussions/", {
         headers: {
           authorization: localStorage.getItem("jwt"),
         },

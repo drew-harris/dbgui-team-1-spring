@@ -22,6 +22,7 @@ import {
   MenuItem
 } from "@mui/material";
 import NavBar from "../../components/nav/PatientNavBar";
+import { API_URL } from "../../utils/url";
 
 
 const PatientPrescriptions = () => {
@@ -43,7 +44,7 @@ const PatientPrescriptions = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get("http://localhost:8000/prescriptions", {
+      const response = await axios.get(API_URL + "/prescriptions", {
         headers: {
           authorization: localStorage.getItem("jwt"),
         },

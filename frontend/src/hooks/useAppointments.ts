@@ -7,6 +7,7 @@ import {
 } from "react-query";
 import apiClient from "../utils/apiClient";
 import { ToastSuccess, ToastError } from "../components/toast/toast";
+import { API_URL } from "../utils/url";
 
 export interface AppointmentData {
   id: string;
@@ -50,7 +51,7 @@ export const useAppointments = (doctorId: string) => {
     >
   ): Promise<AppointmentData> => {
     const { data } = await apiClient.post<AppointmentData>(
-      "http://localhost:8000/appointments/doctor",
+      API_URL + "/appointments/doctor",
       appointment
     );
     return data;
@@ -60,7 +61,7 @@ export const useAppointments = (doctorId: string) => {
     appointmentId: string
   ): Promise<{ success: true }> => {
     const { data } = await apiClient.delete<{ success: true }>(
-      `http://localhost:8000/appointments/${appointmentId}`
+     API_URL +  `/appointments/${appointmentId}`
     );
     return data;
   };
@@ -69,7 +70,7 @@ export const useAppointments = (doctorId: string) => {
     appointmentId: string
   ): Promise<AppointmentData> => {
     const { data } = await apiClient.put<AppointmentData>(
-      `http://localhost:8000/appointments/${appointmentId}/approve`
+      API_URL + `/appointments/${appointmentId}/approve`
     );
     return data;
   };
@@ -78,7 +79,7 @@ export const useAppointments = (doctorId: string) => {
     appointmentId: string
   ): Promise<AppointmentData> => {
     const { data } = await apiClient.put<AppointmentData>(
-      `http://localhost:8000/appointments/${appointmentId}/reject`
+      `${API_URL}/appointments/${appointmentId}/reject`
     );
     return data;
   };
@@ -88,7 +89,7 @@ export const useAppointments = (doctorId: string) => {
     appointmentData,
   }) => {
     const { data } = await apiClient.put<AppointmentData>(
-      `http://localhost:8000/appointments/${appointmentId}`,
+      `${API_URL}/appointments/${appointmentId}`,
       appointmentData
     );
     return data;

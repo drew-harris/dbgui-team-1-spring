@@ -26,8 +26,7 @@ const EditAppointmentForm: React.FC<EditAppointmentFormProps> = ({
 }) => {
   const { user } = useContext(AuthContext);
   const doctorId = user?.id;
-  const { patients } = usePatients();
-  const patient = patients?.find((p) => p.id === initialData.patientId);
+  const { patient } = usePatients(initialData.patientId);
 
   const [time, setTime] = useState(
     initialData.time

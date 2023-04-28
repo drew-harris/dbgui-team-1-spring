@@ -41,7 +41,7 @@ const ScheduleForm: React.FC = () => {
       </div>
     );
   }
-  if (error) return <div>Error: {error}</div>;
+  if (error) return <div><>Error: {error}</></div>;
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">

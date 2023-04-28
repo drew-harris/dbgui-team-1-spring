@@ -22,6 +22,7 @@ import {
   MenuItem
 } from "@mui/material";
 import NavBar from "../../components/nav/DoctorNavBar";
+import { API_URL } from "../../utils/url";
 
 
 const DoctorPrescriptions = () => {
@@ -66,7 +67,7 @@ const DoctorPrescriptions = () => {
     try {
       const headers = {authorization: localStorage.getItem("jwt")};
       const body = {};
-      const response = await axios.put(`http://localhost:8000/prescriptions/${prescriptionId}/refill/${action}`,body, {headers});
+      const response = await axios.put(`${API_URL}/prescriptions/${prescriptionId}/refill/${action}`,body, {headers});
       console.log(response);
 
     } catch (error) {
@@ -78,7 +79,7 @@ const DoctorPrescriptions = () => {
     try {
       const headers = {authorization: localStorage.getItem("jwt")};
       const body = {};
-      const response = await axios.delete(`http://localhost:8000/prescriptions/${prescriptionId}`, {headers});
+      const response = await axios.delete(`${API_URL}/prescriptions/${prescriptionId}`, {headers});
       console.log(response);
 
     } catch (error) {
@@ -90,7 +91,7 @@ const DoctorPrescriptions = () => {
     const headers = {authorization: localStorage.getItem("jwt")};
     const body = {};
       try {
-        axios.post(`http://localhost:8000/prescriptions/${prescriptionid}/refill`, 
+        axios.post(`${API_URL}/prescriptions/${prescriptionid}/refill`, 
         body,
         {headers}
         );
@@ -103,7 +104,7 @@ const DoctorPrescriptions = () => {
   const makeNewPrescription = async (prescription) => {
     const headers = {authorization: localStorage.getItem("jwt")};
     try {
-      const response = await axios.post("http://localhost:8000/prescriptions",
+      const response = await axios.post(API_URL + "/prescriptions",
         prescription,
         { headers }
       );
@@ -119,7 +120,7 @@ const DoctorPrescriptions = () => {
 
   const fetchPatients = async () => {
     try {
-      const response = await axios.get("http://localhost:8000/patients", {
+      const response = await axios.get(API_URL + "/patients", {
         headers: {
           authorization: localStorage.getItem("jwt"),
         },
@@ -140,7 +141,7 @@ const DoctorPrescriptions = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get("http://localhost:8000/prescriptions/doctor", {
+      const response = await axios.get(API_URL + "/prescriptions/doctor", {
         headers: {
           authorization: localStorage.getItem("jwt"),
         },

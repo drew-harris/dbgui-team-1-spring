@@ -6,6 +6,7 @@ import { useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import { useDoctor } from "../../hooks/useDoctor";
 import { DoctorData } from "../../hooks/useDoctor";
+import { API_URL } from '../../utils/url';
 
 
 interface AddDiscussionFormProps {
@@ -24,7 +25,7 @@ const AddDiscussionForm: React.FC<AddDiscussionFormProps> = ({ onAdd }) => {
     event.preventDefault();
     try {
       await axios.post(
-        'http://localhost:8000/discussions/',
+        API_URL + '/discussions/',
         {
           title,
           body,

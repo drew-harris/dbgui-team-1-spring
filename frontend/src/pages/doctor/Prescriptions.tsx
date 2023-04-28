@@ -226,7 +226,7 @@ const DoctorPrescriptions = () => {
         </Typography>
         <button
           onClick={() => setDialogOpen(true)}
-          className="rounded-md bg-indigo-500 px-6 py-2 font-bold text-white hover:bg-indigo-700"
+          className="rounded-md mb-4 bg-indigo-500 px-6 py-2 font-bold text-white hover:bg-indigo-700"
         >
           New Prescription
         </button>

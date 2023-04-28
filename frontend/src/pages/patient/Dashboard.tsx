@@ -1,16 +1,11 @@
 /* eslint-disable no-unused-vars */
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import {
-  Box,
-  Paper,
-  Typography,
-  Button,
-  Grid,
-  Avatar,
-  Badge,
+    Avatar, Box, Button,
+    Grid, Paper,
+    Typography
 } from "@mui/material";
-import { Notifications } from "@mui/icons-material";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import NavBar from "../../components/nav/PatientNavBar";
 
 export default function Dashboard() {
@@ -32,14 +27,6 @@ export default function Dashboard() {
   // }, []);
 
   const handleLogout = () => {
-    navigate("/");
-  };
-
-  const handlePrescription = () => {
-    navigate("/");
-  };
-
-  const handleAppointment = () => {
     navigate("/");
   };
 
